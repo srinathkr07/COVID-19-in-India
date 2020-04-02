@@ -23,4 +23,4 @@ This dashboard has been made entirely using Rmarkdown framework.
 
 **Note**
 
-Since the data is scraped from [Ministry of Health and Family Welfare, India](https://www.mohfw.gov.in/) and **the format of the page is changed often**, one might not be able to see the stats and visualisation, if the page format doesn't match with the one I have coded for. I'll look for changes daily, if any and try to fix them. 
+Since the data is scraped from [Ministry of Health and Family Welfare, India](https://www.mohfw.gov.in/) and **the format of the page is changed often**, one might not be able to see the stats and visualisation, if the page format doesn't match with the one I have coded for. 
