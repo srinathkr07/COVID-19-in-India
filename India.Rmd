@@ -115,7 +115,7 @@ This dashboard has been made entirely using Rmarkdown framework.
 
 [Ministry of Health and Family Welfare, India](https://www.mohfw.gov.in/).
 
-**R packages used **
+**R packages used**
 
 * Dashboard - [flexdashboard](https://rmarkdown.rstudio.com/flexdashboard/) package.
 
