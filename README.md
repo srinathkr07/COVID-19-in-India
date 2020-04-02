@@ -1,5 +1,7 @@
 # COVID-19-in-India
 
+https://srinathkr.shinyapps.io/COVID19-India/
+
 ![Screenshot](/Screenshots/COVID19.png)
 
 This simple dashboard gives an overview of the spread of the Novel Coronavirus COVID-19 pandemic across India, state-wise. 
