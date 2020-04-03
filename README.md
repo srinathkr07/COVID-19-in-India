@@ -9,18 +9,18 @@ This dashboard has been made entirely using Rmarkdown framework.
 
 **Data source**
 
-[Ministry of Health and Family Welfare, India](https://www.mohfw.gov.in/).
+[COVID-19 India API](https://api.covid19india.org/), a volunteer-driven API for COVID-19 stats & patient tracing in India.
 
 **R packages used**
 
 * Dashboard - [flexdashboard](https://rmarkdown.rstudio.com/flexdashboard/) package.
 
-* Table - [dplyr](https://dplyr.tidyverse.org/), [tidyr](https://tidyr.tidyverse.org/) and [DT](https://rstudio.github.io/DT/) packages.
+* Table - [DT](https://rstudio.github.io/DT/) package.
 
-* Scraping - [rvest](http://rvest.tidyverse.org/), [magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html), [xml2](https://xml2.r-lib.org/) and [stringr](https://stringr.tidyverse.org/) packages.
+* API Data - [rjson](https://www.rdocumentation.org/packages/rjson/versions/0.2.20) package.
 
 * Map Visualization - [ggplot2](https://ggplot2.tidyverse.org/), [geojsonio](https://ropensci.org/tutorials/geojsonio_tutorial/), [ggiraph](https://davidgohel.github.io/ggiraph/), [colormap](https://bhaskarvk.github.io/colormap/) and [hrbrthemes](https://hrbrmstr.github.io/hrbrthemes/) packages. 
 
-**Note**
+**Acknowledgement**
 
-Since the data is scraped from [Ministry of Health and Family Welfare, India](https://www.mohfw.gov.in/) and **the format of the page is changed often**, one might not be able to see the stats and visualisation, if the page format doesn't match with the one I have coded for. 
+Thanks for the API, [COVID-19 India API](https://api.covid19india.org/)! 
