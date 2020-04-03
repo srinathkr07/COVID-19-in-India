@@ -3,7 +3,7 @@ title: "COVID-19 in India"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
-    vertical_layout: fill
+    vertical_layout:  fill
     social: ["twitter", "facebook", "linkedin"]
     theme: readable
 runtime: shiny
@@ -12,42 +12,26 @@ runtime: shiny
 ```{r setup, include=FALSE}
 
 library(flexdashboard)
-library(rvest)
-library(magrittr)
-library(xml2)
-library(stringr)
+library(rjson)
+library(DT)
 library(ggplot2)
 library(ggiraph)
 library(geojsonio)
 library(colormap) 
 library(hrbrthemes) 
 
-url = "https://www.mohfw.gov.in/"
+result = fromJSON(file = "http://api.covid19india.org/data.json")
 
-page = read_html(url, as.data.frame=T, stringsAsFactors = TRUE)
+india = data.frame(matrix(ncol = 5, nrow = 0))
+colnames(india) = c("State/UT", "Confirmed", "Active", "Recovered", "Death")
 
-page %>%  
-  html_nodes("table") %>% 
-  .[[1]] %>% 
-  html_table(fill=T) -> india
-
-# Removing S.no column
-india = india[, -1]
-# Removing the last row (Total no. of cases)
-india = head(india, -1)
-
-# Renaming the columns of the table
-colnames(india) = c("State/UT", "Confirmed", "Recovered", "Death")
-
-# Changing the format for each of the column 
-india$`State/UT` = as.character(india$`State/UT`)
-india$Confirmed = as.numeric(india$Confirmed)
-india$Recovered = as.numeric(india$Recovered)
-india$Death = as.numeric(india$Death)
-
-# Arrange by the confirmed cases in descending order
-india = india[order(-india[, 2]), ]
-india$`State/UT`[which(india$`State/UT` == "Telengana")] = "Telangana"
+for (i in 2:38)
+  if(as.numeric(result$statewise[[i]]$confirmed)>0)
+    india[nrow(india)+1, ] = list(result$statewise[[i]]$state, 
+                                as.numeric(result$statewise[[i]]$confirmed), 
+                                as.numeric(result$statewise[[i]]$active), 
+                                as.numeric(result$statewise[[i]]$recovered), 
+                                as.numeric(result$statewise[[i]]$deaths))
 
 copy = data.frame(india)
 names(copy)[names(copy) == "State.UT"] <- "id"
@@ -61,8 +45,8 @@ final_plot[is.na(final_plot)] = 0
 
 ```
 
-Stats and Visualization {data-icon="fa-line-chart"}
-=====
+Summary {data-icon="fa-line-chart"}
+===========================
 
 Column {}
 -----------------------------------------------------------------------
@@ -81,7 +65,7 @@ india %>%
 Column {}
 -----------------------------------------------------------------------
 
-### Map visualization
+### India map
 
 ```{r}
 
@@ -90,8 +74,8 @@ renderggiraph({
   g <- ggplot(final_plot) +
   geom_polygon_interactive(
     color='black', size = 0.3, 
-    aes(x = long, y = lat, group = group, fill = Confirmed+Recovered+Death,
-        tooltip = sprintf("State/UT: %s <br> Confirmed: %s <br> Active: %s <br> Recovered: %s <br> Death(s): %s", id, Confirmed, Confirmed-Recovered-Death, Recovered, Death))) +
+    aes(x = long, y = lat, group = group, fill = Confirmed,
+        tooltip = sprintf("State/UT: %s <br> Confirmed: %s <br> Active: %s <br> Recovered: %s <br> Death(s): %s", id, Confirmed, Active, Recovered, Death))) +
   guides(fill=guide_legend("No. of cases")) +
   hrbrthemes::theme_ipsum() +
   colormap::scale_fill_colormap(
@@ -111,24 +95,26 @@ About {data-orientation=rows, data-icon="fa-question-circle"}
 This simple dashboard gives an overview of the spread of the Novel Coronavirus COVID-19 pandemic across India, state-wise. 
 This dashboard has been made entirely using Rmarkdown framework.
 
-**Data source**
+**Data**
 
-[Ministry of Health and Family Welfare, Government of India](https://www.mohfw.gov.in/).
+[COVID-19 India API](https://api.covid19india.org/), a volunteer-driven API for COVID-19 stats & patient tracing in India.
 
 **R packages used**
 
 * Dashboard - [flexdashboard](https://rmarkdown.rstudio.com/flexdashboard/) package.
 
-* Table - [dplyr](https://dplyr.tidyverse.org/), [tidyr](https://tidyr.tidyverse.org/) and [DT](https://rstudio.github.io/DT/) packages.
+* Table - [DT](https://rstudio.github.io/DT/) package.
 
-* Scraping - [rvest](http://rvest.tidyverse.org/), [magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html), [xml2](https://xml2.r-lib.org/) and [stringr](https://stringr.tidyverse.org/) packages.
+* API Data - [rjson](https://www.rdocumentation.org/packages/rjson/versions/0.2.20) package.
 
 * Map Visualization - [ggplot2](https://ggplot2.tidyverse.org/), [geojsonio](https://ropensci.org/tutorials/geojsonio_tutorial/), [ggiraph](https://davidgohel.github.io/ggiraph/), [colormap](https://bhaskarvk.github.io/colormap/) and [hrbrthemes](https://hrbrmstr.github.io/hrbrthemes/) packages. 
 
 **Note**
 
-Since the data is scraped from [Ministry of Health and Family Welfare, Government of India](https://www.mohfw.gov.in/) and **the format of the page is changed often**, one might not be able to see the stats and visualisation, if the page format doesn't match with the one I have coded for. I'll look for changes daily, if any and try to fix them. 
+For any other question or feedback, you can contact me on [LinkedIn](https://www.linkedin.com/in/srinath-kr-026147173/).
 
-For any other question or feedback, you can either open an [issue](https://github.com/srinathkr07/COVID-19-in-India/issues) or contact me on [LinkedIn](https://www.linkedin.com/in/srinath-kr-026147173/).
+**Acknowledgement**
 
-**Created by [Srinath K R](https://github.com/srinathkr07).** 
+Thanks for the API, [COVID-19 India API](https://api.covid19india.org/)! 
+
+**Created by [Srinath K R](https://github.com/srinathkr07).**  
