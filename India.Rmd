@@ -33,6 +33,8 @@ for (i in 2:38)
                                 as.numeric(result$statewise[[i]]$recovered), 
                                 as.numeric(result$statewise[[i]]$deaths))
 
+india = india[order(-india[, 2]), ]
+
 copy = data.frame(india)
 names(copy)[names(copy) == "State.UT"] <- "id"
 
