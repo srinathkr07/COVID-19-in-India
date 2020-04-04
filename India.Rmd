@@ -2,7 +2,6 @@
 title: "COVID-19 in India"
 output: 
   flexdashboard::flex_dashboard:
-    orientation: columns
     vertical_layout:  fill
     social: ["twitter", "facebook", "linkedin"]
     theme: readable
@@ -14,6 +13,7 @@ runtime: shiny
 library(flexdashboard)
 library(rjson)
 library(DT)
+library(plotly)
 library(ggplot2)
 library(ggiraph)
 library(geojsonio)
@@ -35,6 +35,11 @@ for (i in 2:38)
 
 india = india[order(-india[, 2]), ]
 
+totalConfirmed = as.numeric(result$statewise[[1]]$confirmed)
+totalActive = as.numeric(result$statewise[[1]]$active)
+totalRecovered = as.numeric(result$statewise[[1]]$recovered)
+totalDeath = as.numeric(result$statewise[[1]]$deaths)
+
 copy = data.frame(india)
 names(copy)[names(copy) == "State.UT"] <- "id"
 
@@ -47,10 +52,37 @@ final_plot[is.na(final_plot)] = 0
 
 ```
 
-Summary {data-icon="fa-line-chart"}
-===========================
+Summary {data-orientation=rows data-icon="fa-list-alt"}
+===========
 
-Column {}
+Row{}
+----------------------
+
+### Total Confirmed cases
+
+```{r}
+valueBox(value = totalConfirmed, icon = "fa-check-circle")
+```
+
+### Total Active cases
+
+```{r}
+valueBox(value = totalActive, icon = "fa-toggle-on")
+```
+
+### Total Recovered
+
+```{r}
+valueBox(value = totalRecovered, icon = "fa-heartbeat")
+```
+
+### Total Deaths
+
+```{r}
+valueBox(value = totalDeath, icon = "fa-bed")
+```
+
+Row {}
 -----------------------------------------------------------------------
 
 ### State wise details
@@ -61,6 +93,47 @@ india %>%
   DT::datatable(rownames = FALSE,
                 colnames = colnames(india),
                 options = list(pageLength = nrow(india), dom = 'tip'))
+
+```
+
+
+Visualization {data-icon="fa-line-chart"}
+==========
+
+Column
+------------------------
+
+### State-wise distribution of cases
+
+```{r}
+
+india$`State/UT` <- factor(india$`State/UT`, levels = unique(india$`State/UT`)[order(india$Confirmed, decreasing = TRUE)])
+
+plotly::plot_ly(data = india,
+                x = india$`State/UT`,
+                y = india$Active, 
+                type = "bar", 
+                name = "Active",
+                marker = list(color = "#1f77b4")) %>%
+  
+  plotly::add_trace(y = india$Recovered, 
+                    name = "Recovered",
+                    marker = list(color = "forestgreen")) %>%
+    
+  plotly::add_trace(y = india$Death, 
+                    name = "Death",
+                    marker = list(color = "red")) %>%
+  
+  plotly::layout(barmode = 'stack',
+                 yaxis = list(title = "Total Cases"),
+                 xaxis = list(title = ""), 
+                 hovermode = "compare",
+                  margin =  list(
+                   b = 10,
+                   t = 10,
+                   pad = 2
+                 ),
+                 legend = list(x = 0.1, y = 1.4))
 
 ```
 
@@ -89,19 +162,20 @@ renderggiraph({
 
 ```
 
-About {data-orientation=rows, data-icon="fa-question-circle"}
+
+About {data-icon="fa-question-circle"}
 ==========
 
 **COVID-19 in India : A Dashboard**
 
-This simple dashboard gives an overview of the spread of the Novel Coronavirus COVID-19 pandemic across India, state-wise. 
+This simple dashboard gives an overview of the spread of the Novel Coronavirus (COVID-19) pandemic across India, state-wise. 
 This dashboard has been made entirely using Rmarkdown framework.
 
-**Data**
+**Data: **
 
 [COVID-19 India API](https://api.covid19india.org/), a volunteer-driven API for COVID-19 stats & patient tracing in India.
 
-**R packages used**
+**R packages used: **
 
 * Dashboard - [flexdashboard](https://rmarkdown.rstudio.com/flexdashboard/) package.
 
@@ -109,13 +183,13 @@ This dashboard has been made entirely using Rmarkdown framework.
 
 * API Data - [rjson](https://www.rdocumentation.org/packages/rjson/versions/0.2.20) package.
 
-* Map Visualization - [ggplot2](https://ggplot2.tidyverse.org/), [geojsonio](https://ropensci.org/tutorials/geojsonio_tutorial/), [ggiraph](https://davidgohel.github.io/ggiraph/), [colormap](https://bhaskarvk.github.io/colormap/) and [hrbrthemes](https://hrbrmstr.github.io/hrbrthemes/) packages. 
+* Visualization - [plotly](https://plot.ly/r/), [ggplot2](https://ggplot2.tidyverse.org/), [geojsonio](https://ropensci.org/tutorials/geojsonio_tutorial/), [ggiraph](https://davidgohel.github.io/ggiraph/), [colormap](https://bhaskarvk.github.io/colormap/) and [hrbrthemes](https://hrbrmstr.github.io/hrbrthemes/) packages. 
 
-**Note**
+**Note: **
 
 For any other question or feedback, you can contact me on [LinkedIn](https://www.linkedin.com/in/srinath-kr-026147173/).
 
-**Acknowledgement**
+**Acknowledgement: **
 
 Thanks for the API, [COVID-19 India API](https://api.covid19india.org/)! 
 
