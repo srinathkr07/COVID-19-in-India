@@ -2,7 +2,9 @@
 
 https://srinathkr.shinyapps.io/COVID19-India/
 
-![Screenshot](/Screenshots/COVID19.png)
+![Summary](/Screenshots/Summary.png)
+
+![Visualization](/Screenshots/Visualization.png)
 
 This simple dashboard gives an overview of the spread of the Novel Coronavirus (COVID-19) pandemic across India, state-wise. 
 This dashboard has been made entirely using Rmarkdown framework.
