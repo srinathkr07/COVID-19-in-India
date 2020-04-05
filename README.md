@@ -2,11 +2,19 @@
 
 https://srinathkr.shinyapps.io/COVID19-India/
 
+## Summary
+
 ![Summary](/Screenshots/Summary.png)
+
+## Visualization
 
 ![Visualization](/Screenshots/Visualization.png)
 
+## Cumulative Trends
+
 ![Cumulative Trends](/Screenshots/CumulativeTrends.png)
+
+## Daily Trends
 
 ![Daily Trends](/Screenshots/DailyTrends.png)
 
