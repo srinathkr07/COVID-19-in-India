@@ -18,6 +18,8 @@ https://srinathkr.shinyapps.io/COVID19-India/
 
 ![Daily Trends](/Screenshots/DailyTrends.png)
 
+**About**
+
 This dashboard gives an overview of the spread of the Novel Coronavirus (COVID-19) pandemic across India, state-wise. 
 This dashboard has been made entirely using Rmarkdown framework.
 
