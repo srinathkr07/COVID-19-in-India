@@ -14,6 +14,7 @@ library(flexdashboard)
 library(rjson)
 library(DT)
 library(plotly)
+library(lubridate)
 library(ggplot2)
 library(ggiraph)
 library(geojsonio)
@@ -49,6 +50,19 @@ states <- fortify(shape, region = "ST_NM")
 merged_shape = merge(states, copy, by = "id", all.x = TRUE)
 final_plot = merged_shape[order(merged_shape$order), ]
 final_plot[is.na(final_plot)] = 0
+
+
+daily = data.frame(matrix(ncol = 7, nrow = 0))
+colnames(daily) = c("Date", "DailyConfirmed", "DailyRecovered", "DailyDeath", "TotalConfirmed", "TotalRecovered", "TotalDeath")
+
+for(i in 1:length(result$cases_time_series))
+  daily[nrow(daily)+1, ] = list(format(as.Date(paste(trimws(result$cases_time_series[[i]]$date), "2020"), format = "%d %B %y"), "%d %b %Y"),
+                                as.numeric(result$cases_time_series[[i]]$dailyconfirmed),
+                                as.numeric(result$cases_time_series[[i]]$dailyrecovered),
+                                as.numeric(result$cases_time_series[[i]]$dailydeceased),
+                                as.numeric(result$cases_time_series[[i]]$totalconfirmed),
+                                as.numeric(result$cases_time_series[[i]]$totalrecovered),
+                                as.numeric(result$cases_time_series[[i]]$totaldeceased))
 
 ```
 
@@ -97,7 +111,7 @@ india %>%
 ```
 
 
-Visualization {data-icon="fa-line-chart"}
+Visualization {data-icon="fa-bar-chart"}
 ==========
 
 Column
@@ -162,6 +176,91 @@ renderggiraph({
 
 ```
 
+Trends {data-orientation=rows data-icon="fa-chart-line"}
+==========
+
+Row {.tabset}
+-------------------
+
+### Cumulative
+
+```{r}
+
+daily$Date = dmy(daily$Date)
+
+plotly::plot_ly(data = daily) %>%
+  
+  plotly::add_trace(x = daily$Date , 
+                    y = daily$TotalConfirmed,
+                    type = "scatter",
+                    mode = "lines+markers",
+                    name = "Confirmed",
+                    line = list(color = "#1f77b4"),
+                    marker = list(color = "#1f77b4")) %>%
+
+  plotly::add_trace(x = daily$Date , 
+                    y = daily$TotalRecovered,
+                    type = "scatter",
+                    mode = "lines+markers",
+                    name = "Recovered",
+                    line = list(color = "forestgreen"),
+                    marker = list(color = "forestgreen")) %>%
+  
+  plotly::add_trace(x = daily$Date , 
+                    y = daily$TotalDeath,
+                    type = "scatter",
+                    mode = "lines+markers",
+                    name = "Death",
+                    line = list(color = "red"),
+                    marker = list(color = "red")) %>%
+  
+  plotly::layout(title = "",
+                 yaxis = list(title = "Cumulative cases"),
+                 xaxis = list(title = "Date"),
+                 legend = list(x = 0.1, y = 0.9),
+                 hovermode = "compare")
+
+```
+
+### Daily
+
+```{r}
+
+#daily$Date = dmy(daily$Date)
+
+plotly::plot_ly(data = daily) %>%
+  
+  plotly::add_trace(x = daily$Date , 
+                    y = daily$DailyConfirmed,
+                    type = "scatter",
+                    mode = "lines+markers",
+                    name = "Confirmed",
+                    line = list(color = "#1f77b4"),
+                    marker = list(color = "#1f77b4")) %>%
+
+  plotly::add_trace(x = daily$Date , 
+                    y = daily$DailyRecovered,
+                    type = "scatter",
+                    mode = "lines+markers",
+                    name = "Recovered",
+                    line = list(color = "forestgreen"),
+                    marker = list(color = "forestgreen")) %>%
+  
+  plotly::add_trace(x = daily$Date , 
+                    y = daily$DailyDeath,
+                    type = "scatter",
+                    mode = "lines+markers",
+                    name = "Death",
+                    line = list(color = "red"),
+                    marker = list(color = "red")) %>%
+  
+  plotly::layout(title = "",
+                 yaxis = list(title = "Daily cases"),
+                 xaxis = list(title = "Date"),
+                 legend = list(x = 0.1, y = 0.9),
+                 hovermode = "compare")
+
+```
 
 About {data-icon="fa-question-circle"}
 ==========
@@ -183,7 +282,7 @@ This dashboard has been made entirely using Rmarkdown framework.
 
 * API Data - [rjson](https://www.rdocumentation.org/packages/rjson/versions/0.2.20) package.
 
-* Visualization - [plotly](https://plot.ly/r/), [ggplot2](https://ggplot2.tidyverse.org/), [geojsonio](https://ropensci.org/tutorials/geojsonio_tutorial/), [ggiraph](https://davidgohel.github.io/ggiraph/), [colormap](https://bhaskarvk.github.io/colormap/) and [hrbrthemes](https://hrbrmstr.github.io/hrbrthemes/) packages. 
+* Visualizations - [plotly](https://plot.ly/r/), [ggplot2](https://ggplot2.tidyverse.org/), [geojsonio](https://ropensci.org/tutorials/geojsonio_tutorial/), [ggiraph](https://davidgohel.github.io/ggiraph/), [colormap](https://bhaskarvk.github.io/colormap/) and [hrbrthemes](https://hrbrmstr.github.io/hrbrthemes/) packages. 
 
 **Note: **
 
