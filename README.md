@@ -1,5 +1,7 @@
 # COVID-19-in-India
 
+### A dashboard to give an overview of the spread of the Novel Coronavirus COVID-19 pandemic across India, state-wise.
+
 Link for the dashboard: https://srinathkr.shinyapps.io/COVID19-India/
 
 ## Summary (as of 12th April 2020)
