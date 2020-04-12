@@ -21,7 +21,7 @@ library(geojsonio)
 library(colormap) 
 library(hrbrthemes) 
 
-result = fromJSON(file = "http://api.covid19india.org/data.json")
+result = fromJSON(file = "https://api.covid19india.org/data.json")
 
 india = data.frame(matrix(ncol = 5, nrow = 0))
 colnames(india) = c("State/UT", "Confirmed", "Active", "Recovered", "Death")
@@ -75,25 +75,25 @@ Row{}
 ### Total Confirmed cases
 
 ```{r}
-valueBox(value = totalConfirmed, icon = "fa-check-circle")
+valueBox(value = paste(format(totalConfirmed, big.mark = ","), "", sep = " "), icon = "fa-check-circle")
 ```
 
 ### Total Active cases
 
 ```{r}
-valueBox(value = totalActive, icon = "fa-toggle-on")
+valueBox(value = paste(format(totalActive, big.mark = ","), "", sep = " "), icon = "fa-toggle-on")
 ```
 
 ### Total Recovered
 
 ```{r}
-valueBox(value = totalRecovered, icon = "fa-heartbeat")
+valueBox(value = paste(format(totalRecovered, big.mark = ","), "", sep = " "), icon = "fa-heartbeat")
 ```
 
 ### Total Deaths
 
 ```{r}
-valueBox(value = totalDeath, icon = "fa-bed")
+valueBox(value = paste(format(totalDeath, big.mark = ","), "", sep = " "), icon = "fa-bed")
 ```
 
 Row {}
@@ -106,7 +106,7 @@ Row {}
 india %>%
   DT::datatable(rownames = FALSE,
                 colnames = colnames(india),
-                options = list(pageLength = nrow(india), dom = 'tip'))
+                options = list(pageLength = nrow(india)/2, dom = 'tip'))
 
 ```
 
@@ -188,34 +188,57 @@ Row {.tabset}
 
 daily$Date = dmy(daily$Date)
 
-plotly::plot_ly(data = daily) %>%
-  
-  plotly::add_trace(x = daily$Date , 
-                    y = daily$TotalConfirmed,
-                    type = "scatter",
-                    mode = "lines+markers",
-                    name = "Confirmed",
-                    line = list(color = "#1f77b4"),
-                    marker = list(color = "#1f77b4")) %>%
+# plotly::plot_ly(data = daily) %>%
+#   
+#   plotly::add_trace(x = daily$Date , 
+#                     y = daily$TotalConfirmed,
+#                     type = "scatter",
+#                     mode = "lines+markers",
+#                     name = "Confirmed",
+#                     line = list(color = "#1f77b4"),
+#                     marker = list(color = "#1f77b4")) %>%
+# 
+#   plotly::add_trace(x = daily$Date , 
+#                     y = daily$TotalRecovered,
+#                     type = "scatter",
+#                     mode = "lines+markers",
+#                     name = "Recovered",
+#                     line = list(color = "forestgreen"),
+#                     marker = list(color = "forestgreen")) %>%
+#   
+#   plotly::add_trace(x = daily$Date , 
+#                     y = daily$TotalDeath,
+#                     type = "scatter",
+#                     mode = "lines+markers",
+#                     name = "Death",
+#                     line = list(color = "red"),
+#                     marker = list(color = "red")) %>%
+#   
+#   plotly::layout(title = "",
+#                  yaxis = list(title = "Cumulative cases"),
+#                  xaxis = list(title = "Date"),
+#                  legend = list(x = 0.1, y = 0.9),
+#                  hovermode = "compare")
 
-  plotly::add_trace(x = daily$Date , 
-                    y = daily$TotalRecovered,
-                    type = "scatter",
-                    mode = "lines+markers",
-                    name = "Recovered",
-                    line = list(color = "forestgreen"),
-                    marker = list(color = "forestgreen")) %>%
+plotly::plot_ly(data = daily,
+                x = daily$Date,
+                y = daily$TotalConfirmed, 
+                name = 'Confirmed', 
+                fillcolor = "#1f77b4",
+                type = 'scatter',
+                mode = 'none', 
+                stackgroup = 'one') %>%
   
-  plotly::add_trace(x = daily$Date , 
-                    y = daily$TotalDeath,
-                    type = "scatter",
-                    mode = "lines+markers",
+  plotly::add_trace(y = daily$TotalRecovered,
+                    name = "Recovered",
+                    fillcolor = "forestgreen") %>%
+  
+  plotly::add_trace(y = daily$TotalDeath,
                     name = "Death",
-                    line = list(color = "red"),
-                    marker = list(color = "red")) %>%
+                    fillcolor = "red") %>%
   
   plotly::layout(title = "",
-                 yaxis = list(title = "Cumulative cases"),
+                 yaxis = list(title = "Cumulative Number of Cases"),
                  xaxis = list(title = "Date"),
                  legend = list(x = 0.1, y = 0.9),
                  hovermode = "compare")
@@ -267,14 +290,14 @@ About {data-icon="fa-question-circle"}
 
 **COVID-19 in India : A Dashboard**
 
-This simple dashboard gives an overview of the spread of the Novel Coronavirus (COVID-19) pandemic across India, state-wise. 
+This dashboard gives an overview of the spread of the Novel Coronavirus (COVID-19) pandemic across India, state-wise. 
 This dashboard has been made entirely using Rmarkdown framework.
 
-**Data:**
+**Data: **
 
 [COVID-19 India API](https://api.covid19india.org/), a volunteer-driven API for COVID-19 stats & patient tracing in India.
 
-**R packages used:**
+**R packages used: **
 
 * Dashboard - [flexdashboard](https://rmarkdown.rstudio.com/flexdashboard/) package.
 
@@ -284,11 +307,11 @@ This dashboard has been made entirely using Rmarkdown framework.
 
 * Visualizations - [plotly](https://plot.ly/r/), [ggplot2](https://ggplot2.tidyverse.org/), [geojsonio](https://ropensci.org/tutorials/geojsonio_tutorial/), [ggiraph](https://davidgohel.github.io/ggiraph/), [colormap](https://bhaskarvk.github.io/colormap/) and [hrbrthemes](https://hrbrmstr.github.io/hrbrthemes/) packages. 
 
-**Note:**
+**Note: **
 
 For any other question or feedback, you can contact me on [LinkedIn](https://www.linkedin.com/in/srinath-kr-026147173/).
 
-**Acknowledgement:**
+**Acknowledgement: **
 
 Thanks for the API, [COVID-19 India API](https://api.covid19india.org/)! 
 
