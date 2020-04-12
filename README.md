@@ -4,7 +4,9 @@ https://srinathkr.shinyapps.io/COVID19-India/
 
 ## Summary
 
-![Summary](/Screenshots/Summary.png)
+![Summary](/Screenshots/Summary1.png)
+
+![Summary](/Screenshots/Summary2.png)
 
 ## Visualization
 
