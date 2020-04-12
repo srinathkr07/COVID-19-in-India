@@ -2,21 +2,21 @@
 
 https://srinathkr.shinyapps.io/COVID19-India/
 
-## Summary
+## Summary (as of 12th April 2020)
 
 ![Summary](/Screenshots/Summary1.png)
 
 ![Summary](/Screenshots/Summary2.png)
 
-## Visualization
+## Visualization (as of 12th April 2020)
 
 ![Visualization](/Screenshots/Visualization.png)
 
-## Cumulative Trends
+## Cumulative Trends (as of 12th April 2020)
 
 ![Cumulative Trends](/Screenshots/CumulativeTrends.png)
 
-## Daily Trends
+## Daily Trends (as of 12th April 2020)
 
 ![Daily Trends](/Screenshots/DailyTrends.png)
 
