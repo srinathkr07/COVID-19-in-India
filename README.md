@@ -1,6 +1,6 @@
 # COVID-19-in-India
 
-https://srinathkr.shinyapps.io/COVID19-India/
+Link for the dashboard: https://srinathkr.shinyapps.io/COVID19-India/
 
 ## Summary (as of 12th April 2020)
 
