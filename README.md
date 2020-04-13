@@ -4,19 +4,19 @@ A dashboard to give an overview of the spread of the Novel Coronavirus COVID-19 
 
 Link for the dashboard: https://srinathkr.shinyapps.io/COVID19-India/
 
-## Summary (as of 12th April 2020)
+## Summary (as of 13th April 2020, 12 pm)
 
 ![Summary](/Screenshots/Summary.png)
 
-## Visualization (as of 12th April 2020)
+## Visualization (as of 13th April 2020, 12 pm)
 
 ![Visualization](/Screenshots/Visualization.png)
 
-## Cumulative Trends (as of 12th April 2020)
+## Cumulative Trends (as of 13th April 2020, 12 pm)
 
 ![Cumulative Trends](/Screenshots/CumulativeTrends.png)
 
-## Daily Trends (as of 12th April 2020)
+## Daily Trends (as of 13th April 2020, 12 pm)
 
 ![Daily Trends](/Screenshots/DailyTrends.png)
 
