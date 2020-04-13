@@ -6,9 +6,7 @@ Link for the dashboard: https://srinathkr.shinyapps.io/COVID19-India/
 
 ## Summary (as of 12th April 2020)
 
-![Summary](/Screenshots/Summary1.png)
-
-![Summary](/Screenshots/Summary2.png)
+![Summary](/Screenshots/Summary.png)
 
 ## Visualization (as of 12th April 2020)
 
