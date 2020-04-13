@@ -106,7 +106,7 @@ Row {}
 india %>%
   DT::datatable(rownames = FALSE,
                 colnames = colnames(india),
-                options = list(pageLength = nrow(india)/2, dom = 'tip'))
+                options = list(pageLength = nrow(india), dom = 'tip'))
 
 ```
 
