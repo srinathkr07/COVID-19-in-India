@@ -22,6 +22,8 @@ Link for the dashboard: https://srinathkr.shinyapps.io/COVID19-India/
 
 ## SIR Model (as of 25th April 2020, 6:30 pm)
 
+### Introduction
+
 Compartmental models simplify the mathematical modelling of infectious diseases. The **SIR model** is one of the simplest compartmental models, and many models are derivatives of this basic form. 
 
 The model consists of three compartments: 
@@ -40,6 +42,10 @@ This model is reasonably predictive for infectious diseases that are transmitted
 
 ![Predicted vs Observed cases (Log-linear)](/Screenshots/SIRModel2.png)
 
+### Math in the model
+
+#### Equations
+
 The SIR system without so-called vital dynamics (birth and death, sometimes called demography) described above can be expressed by the following set of ordinary differential equations: 
 
 ![Equation 1](https://wikimedia.org/api/rest_v1/media/math/render/svg/29728a7d4bebe8197dca7d873d81b9dce954522e)
@@ -56,17 +62,17 @@ it follows that:
 
 expressing in mathematical terms the constancy of population N.
 
-### Prediction of infectious cases
-
-![Worst case prediction of infectious cases](/Screenshots/SIRModel3.png)
-
-### R0
+#### R0
 
 The dynamics of the infectious class depends on the following ratio:
 
 ![Equation 4](https://wikimedia.org/api/rest_v1/media/math/render/svg/4aae42f8253a395c52a798a9ad5a7e4adb6fceea)
 
-the so-called **Basic Reproduction number** (also called basic reproduction ratio). **R0** (pronounced “R-naught”) is the rate at which a virus is transmitted. It indicates the **average number of people who will contract the virus from a person who has already been infected**,
+the so-called **Basic Reproduction number** (also called basic reproduction ratio). **R0** (pronounced “R-naught”) is the rate at which a virus is transmitted. It indicates the **average number of people who will contract the virus from a person who has already been infected**, in a population where all subjects are susceptible. 
+
+### Prediction of infectious cases
+
+![Worst case prediction of infectious cases](/Screenshots/SIRModel3.png)
 
 ### Prediction of infectious cases (Log-linear)
 
