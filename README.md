@@ -48,7 +48,7 @@ This model is reasonably predictive for infectious diseases that are transmitted
 
 #### Equations
 
-The SIR system without so-called vital dynamics (birth and death, sometimes called demography) described above can be expressed by the following set of ordinary differential equations: 
+The SIR system without so-called vital dynamics (birth and death, sometimes called demography) can be expressed by the following set of ordinary differential equations (ODEs): 
 
 ![Equation 1](https://wikimedia.org/api/rest_v1/media/math/render/svg/29728a7d4bebe8197dca7d873d81b9dce954522e)
 
