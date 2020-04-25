@@ -34,7 +34,7 @@ Compartmental models simplify the mathematical modelling of infectious diseases.
 
 The SIR system without so-called vital dynamics (birth and death, sometimes called demography) described above can be expressed by the following set of ordinary differential equations: 
 
-{\displaystyle {\begin{aligned}&{\frac {dS}{dt}}=-{\frac {\beta IS}{N}},\\[6pt]&{\frac {dI}{dt}}={\frac {\beta IS}{N}}-\gamma I,\\[6pt]&{\frac {dR}{dt}}=\gamma I,\end{aligned}}}
+![Equation 1](https://wikimedia.org/api/rest_v1/media/math/render/svg/29728a7d4bebe8197dca7d873d81b9dce954522e)
 
 where **S** is the stock of susceptible population, **I** is the stock of infected, **R** is the stock of removed population (either by death or recovery), and **N** is the sum of these three.
 
