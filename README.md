@@ -22,7 +22,7 @@ Link for the dashboard: https://srinathkr.shinyapps.io/COVID19-India/
 
 ## About
 
-**COVID-19 in India : A Dashboard** gives an overview of the spread of the Novel Coronavirus (COVID-19) pandemic across India, state-wise along with **[SIR (Susceptible - Infectious - Recovered) model]**(https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology#The_SIR_model) for a period of 150 days starting from March 1. 
+**COVID-19 in India : A Dashboard** gives an overview of the spread of the Novel Coronavirus (COVID-19) pandemic across India, state-wise along with **[SIR (Susceptible - Infectious - Recovered) model](https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology#The_SIR_model)** for a period of 150 days starting from March 1. 
 
 This dashboard has been made entirely using Rmarkdown framework.
 
