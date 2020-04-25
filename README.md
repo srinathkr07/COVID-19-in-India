@@ -40,11 +40,11 @@ where **S** is the stock of susceptible population, **I** is the stock of infect
 
 Note that from:
 
-{\displaystyle {\frac {dS}{dt}}+{\frac {dI}{dt}}+{\frac {dR}{dt}}=0,}
+![Equation 2](https://wikimedia.org/api/rest_v1/media/math/render/svg/8edc1234df2c16e511f3c417cfd1720c1086de05)
 
 it follows that:
 
-{\displaystyle S(t)+I(t)+R(t)={\text{constant}}=N.}
+![Equation 3](https://wikimedia.org/api/rest_v1/media/math/render/svg/4ef2c489d7916e880a3bccc6f85ccae3fb2f79a3)
 
 ### Prediction of infectious cases
 
@@ -52,7 +52,7 @@ it follows that:
 
 The dynamics of the infectious class depends on the following ratio:
 
-{\displaystyle R_{0}={\frac {\beta }{\gamma }},}{\displaystyle R_{0}={\frac {\beta }{\gamma }},}
+![Equation 4](https://wikimedia.org/api/rest_v1/media/math/render/svg/4aae42f8253a395c52a798a9ad5a7e4adb6fceea)
 
 the so-called basic reproduction number (also called basic reproduction ratio). **R0** (pronounced “R-naught”) is the rate at which a virus is transmitted. It indicates the **average number of people who will contract the virus from a person who has already been infected**,
 
@@ -62,7 +62,7 @@ the so-called basic reproduction number (also called basic reproduction ratio). 
 
 ## Note
 
-This is a worst case prediction and should be taken with a lot of caution. Not surprisingly, it can be wrong. On one hand, this is based on rather unrealistic assumptions (for example, no public health interventions, fixed Reproduction number, etc.). On the other hand, we still have to be careful and strictly follow public health interventions because previous pandemics such as H1N1 and Spanish flu have shown that incredibly high numbers are not impossible! 
+This is a **worst case prediction** and should be taken with a lot of caution. Not surprisingly, it can be wrong. On one hand, this is based on rather unrealistic assumptions (for example, no public health interventions, fixed Reproduction number, etc.). On the other hand, we still have to be careful and strictly follow public health interventions because previous pandemics such as H1N1 and Spanish flu have shown that incredibly high numbers are not impossible! 
 
 ## About
 
