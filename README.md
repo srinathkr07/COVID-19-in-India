@@ -1,24 +1,42 @@
 # COVID-19-in-India
 
-A dashboard to give an overview of the spread of the Novel Coronavirus COVID-19 pandemic across India, state-wise.
+A dashboard to give an overview of the spread of the Novel Coronavirus COVID-19 pandemic across India, state-wise along with **SIR (Susceptible - Infectious - Recovered) model** for a period of 150 days starting from March 1. 
 
 Link for the dashboard: https://srinathkr.shinyapps.io/COVID19-India/
 
-## Summary (as of 13th April 2020, 12 pm)
+## Summary (as of 25th April 2020, 6:30 pm)
 
 ![Summary](/Screenshots/Summary.png)
 
-## Visualization (as of 13th April 2020, 12 pm)
+## Visualization (as of 25th April 2020, 6:30 pm)
 
 ![Visualization](/Screenshots/Visualization.png)
 
-## Cumulative Trends (as of 13th April 2020, 12 pm)
+## Cumulative Trends (as of 25th April 2020, 6:30 pm)
 
 ![Cumulative Trends](/Screenshots/CumulativeTrends.png)
 
-## Daily Trends (as of 13th April 2020, 12 pm)
+## Daily Trends (as of 25th April 2020, 6:30 pm)
 
 ![Daily Trends](/Screenshots/DailyTrends.png)
+
+## SIR Model (as of 25th April 2020, 6:30 pm)
+
+### Predicted vs Observed cases
+
+![Predicted vs Observed cases](/Screenshots/SIRModel1.png)
+
+### Predicted vs Observed cases (Log-linear)
+
+![Predicted vs Observed cases (Log-linear)](/Screenshots/SIRModel2.png)
+
+### Worst case prediction of infectious cases
+
+![Worst case prediction of infectious cases](/Screenshots/SIRModel3.png)
+
+### Worst case prediction of infectious cases (Log-linear)
+
+![Worst case prediction of infectious cases (Log-linear)](/Screenshots/SIRModel4.png)
 
 ## About
 
