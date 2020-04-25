@@ -1,10 +1,12 @@
 ---
 title: "COVID-19 in India"
+
 output: 
   flexdashboard::flex_dashboard:
     vertical_layout:  fill
     social: ["twitter", "facebook", "linkedin"]
     theme: readable
+    
 runtime: shiny
 ---
 
@@ -13,15 +15,37 @@ runtime: shiny
 library(flexdashboard)
 library(rjson)
 library(DT)
-library(plotly)
+library(dplyr)
 library(lubridate)
+library(deSolve)
+library(geojsonio)
+library(plotly)
 library(ggplot2)
 library(ggiraph)
-library(geojsonio)
 library(colormap) 
 library(hrbrthemes) 
 
+# SIR model function
+SIR <- function(time, state, parameters) {
+  par <- as.list(c(state, parameters))
+  with(par, {
+    dS <- -beta * I * S / N
+    dI <- beta * I * S / N - gamma * I
+    dR <- gamma * I
+    list(c(dS, dI, dR))
+  })
+}
+
 result = fromJSON(file = "https://api.covid19india.org/data.json")
+
+DeltaConfirmed = result$statewise[[1]]$deltaconfirmed
+DeltaDeaths = result$statewise[[1]]$deltadeaths
+DeltaRecovered = result$statewise[[1]]$deltarecovered
+
+totalConfirmed = as.numeric(result$statewise[[1]]$confirmed)
+totalActive = as.numeric(result$statewise[[1]]$active)
+totalRecovered = as.numeric(result$statewise[[1]]$recovered)
+totalDeath = as.numeric(result$statewise[[1]]$deaths)
 
 india = data.frame(matrix(ncol = 5, nrow = 0))
 colnames(india) = c("State/UT", "Confirmed", "Active", "Recovered", "Death")
@@ -35,11 +59,6 @@ for (i in 2:38)
                                 as.numeric(result$statewise[[i]]$deaths))
 
 india = india[order(-india[, 2]), ]
-
-totalConfirmed = as.numeric(result$statewise[[1]]$confirmed)
-totalActive = as.numeric(result$statewise[[1]]$active)
-totalRecovered = as.numeric(result$statewise[[1]]$recovered)
-totalDeath = as.numeric(result$statewise[[1]]$deaths)
 
 copy = data.frame(india)
 names(copy)[names(copy) == "State.UT"] <- "id"
@@ -75,25 +94,47 @@ Row{}
 ### Total Confirmed cases
 
 ```{r}
-valueBox(value = paste(format(totalConfirmed, big.mark = ","), "", sep = " "), icon = "fa-check-circle")
+
+if(DeltaConfirmed>=0) {
+  valueBox(value = paste(format(totalConfirmed, big.mark = ","), " (", "\u25B2", DeltaConfirmed, ")", sep = " "), icon = "fa-check-circle")
+} else {
+  valueBox(value = paste(format(totalConfirmed, big.mark = ","), " (", "\u25BC", DeltaConfirmed, ")", sep = " "), icon = "fa-check-circle")
+}
+
 ```
 
 ### Total Active cases
 
 ```{r}
+
 valueBox(value = paste(format(totalActive, big.mark = ","), "", sep = " "), icon = "fa-toggle-on")
+
 ```
 
 ### Total Recovered
 
 ```{r}
-valueBox(value = paste(format(totalRecovered, big.mark = ","), "", sep = " "), icon = "fa-heartbeat")
+
+if(DeltaRecovered>=0) {
+  valueBox(value = paste(format(totalRecovered, big.mark = ","), " (", "\u25B2", DeltaRecovered, ")", sep = " "), icon = "fa-heartbeat")
+} else {
+  valueBox(value = paste(format(totalRecovered, big.mark = ","), " (", "\u25BC", DeltaRecovered, ")", sep = " "), icon = "fa-heartbeat")
+}
+  
+
 ```
 
 ### Total Deaths
 
 ```{r}
-valueBox(value = paste(format(totalDeath, big.mark = ","), "", sep = " "), icon = "fa-bed")
+
+if(DeltaDeaths>=0) {
+  valueBox(value = paste(format(totalDeath, big.mark = ","), " (", "\u25B2", DeltaDeaths, ")", sep = " "), icon = "fa-bed")
+} else {
+  valueBox(value = paste(format(totalDeath, big.mark = ","), " (", "\u25BC", DeltaDeaths, ")", sep = " "), icon = "fa-bed")
+}
+  
+
 ```
 
 Row {}
@@ -139,8 +180,7 @@ plotly::plot_ly(data = india,
                     marker = list(color = "red")) %>%
   
   plotly::layout(barmode = 'stack',
-                 yaxis = list(title = "Total Cases"),
-                 xaxis = list(title = ""), 
+                 yaxis = list(title = "Total Cases"), 
                  hovermode = "compare",
                   margin =  list(
                    b = 10,
@@ -168,7 +208,7 @@ renderggiraph({
   guides(fill=guide_legend("No. of cases")) +
   hrbrthemes::theme_ipsum() +
   colormap::scale_fill_colormap(
-    colormap=colormap::colormaps$copper, reverse = T) +
+    colormap=colormap::colormaps$velocity_blue, reverse = T) +
   labs(title='Total cases in India', subtitle = "Hover over a state for more details")
 
   girafe_options(ggiraph(code = print(g), width_svg = 12, height_svg = 12))
@@ -285,33 +325,227 @@ plotly::plot_ly(data = daily) %>%
 
 ```
 
-About {data-icon="fa-question-circle"}
-==========
+SIR Model {.storyboard data-orientation=rows data-icon="fa-area-chart"}
+======================
 
-**COVID-19 in India : A Dashboard**
+### COVID-19 Predicted vs Observed cases, India
 
-This dashboard gives an overview of the spread of the Novel Coronavirus (COVID-19) pandemic across India, state-wise. 
-This dashboard has been made entirely using Rmarkdown framework.
+```{r}
 
-**Data:**
+Infected = daily$TotalConfirmed
+Infected=Infected[c(32:length(Infected))] #From 1st March 2020 till previous day
+Day <- 1:(length(Infected))
 
-[COVID-19 India API](https://api.covid19india.org/), a volunteer-driven API for COVID-19 stats & patient tracing in India.
+N = 1380004385 # Population of India
+init = c(S = N - Infected[1], I = Infected[1], R = 0)
 
-**R packages used:**
+RSS <- function(parameters) {
+  names(parameters) <- c("beta", "gamma")
+  out <- ode(y = init, times = Day, func = SIR, parms = parameters)
+  fit <- out[, 3]
+  sum((Infected - fit)^2)
+}
 
-* Dashboard - [flexdashboard](https://rmarkdown.rstudio.com/flexdashboard/) package.
+Opt <- optim(c(0.5, 0.5), RSS, method = "L-BFGS-B", lower = c(0, 0), upper = c(1, 1), control = list(parscale = c(10^-4,10^-4)))
+Opt_par <- setNames(Opt$par, c("beta", "gamma"))
 
-* Table - [DT](https://rstudio.github.io/DT/) package.
+sir_start_date <- "2020-03-01"
 
-* API Data - [rjson](https://www.rdocumentation.org/packages/rjson/versions/0.2.20) package.
+t <- 1:as.integer(ymd(Sys.Date()) - ymd(sir_start_date))
 
-* Visualizations - [plotly](https://plot.ly/r/), [ggplot2](https://ggplot2.tidyverse.org/), [geojsonio](https://ropensci.org/tutorials/geojsonio_tutorial/), [ggiraph](https://davidgohel.github.io/ggiraph/), [colormap](https://bhaskarvk.github.io/colormap/) and [hrbrthemes](https://hrbrmstr.github.io/hrbrthemes/) packages. 
+fitted_cumulative_incidence <- data.frame(ode(y = init, times = t, func = SIR, parms = Opt_par))
+
+fitted_cumulative_incidence <- fitted_cumulative_incidence %>%
+  mutate(
+    Date = ymd(sir_start_date) + days(t - 1),
+    Country = "India",
+    cumulative_incident_cases = Infected
+  )
+
+fitted_cumulative_incidence %>%
+  ggplot(aes(x = Date)) +
+  geom_line(aes(y = I), colour = "red") +
+  geom_point(aes(y = cumulative_incident_cases), colour = "blue") +
+  labs(
+    y = "Cumulative cases"
+  ) +
+  theme_minimal()
+
+```
+
+***
+
+**SIR Model**
+
+The basic idea behind the **SIR (Susceptible - Infectious - Recovered) model** of communicable disease outbreaks is that there are three groups (also called compartments) of individuals:
+
+- **S**: those who are healthy but **susceptible** to the disease (i.e., at risk of being contaminated). At the start of the pandemic, S is the entire population since no one is immune to the virus.
+
+- **I**: the **infectious** (and thus, infected) people
+
+- **R**: individuals who were contaminated but who have either **recovered** or died. They are not infectious anymore.
+
+**Legend:**
+
+- Red - Predicted cases from SIR model
+
+- Blue - Actually Observed cases
 
 **Note:**
 
+For the model, cases from 1st March 2020 are only taken. 
+
+
+### COVID-19 Predicted vs Observed cases, India (Log-linear plot)
+
+```{r}
+
+fitted_cumulative_incidence %>%
+  ggplot(aes(x = Date)) +
+  geom_line(aes(y = I), colour = "red") +
+  geom_point(aes(y = cumulative_incident_cases), colour = "blue") +
+  labs(y = "Cumulative cases") +
+  theme_minimal() +
+  scale_y_log10(labels = scales::comma)
+
+```
+
+***
+
+**Legend:**
+
+- Red - Predicted cases from SIR model
+
+- Blue - Actually Observed cases
+
+**Note:**
+
+For the model, cases from 1st March 2020 are only taken. 
+
+
+### COVID-19 Predicted cases, India
+
+```{r}
+
+#Basic Reproduction number
+R0 = as.numeric(Opt_par[1] / Opt_par[2])
+
+t <- 1:150
+
+# get the fitted values from SIR model
+fitted_cumulative_incidence <- data.frame(ode(
+  y = init, times = t,
+  func = SIR, parms = Opt_par
+))
+
+# With date
+fitted_cumulative_incidence <- fitted_cumulative_incidence %>%
+  mutate(
+    Date = ymd(sir_start_date) + days(t - 1),
+    Country = "India",
+    cumulative_incident_cases = c(Infected, rep(NA, length(t) - length(Infected)))
+  )
+
+# Normal plot of data
+fitted_cumulative_incidence %>%
+  ggplot(aes(x = Date)) +
+  geom_line(aes(y = I), colour = "red") +
+  geom_line(aes(y = S), colour = "black") +
+  geom_line(aes(y = R), colour = "green") +
+  geom_point(aes(y = cumulative_incident_cases), colour = "blue") +
+  scale_y_continuous(labels = scales::comma) +
+  labs(y = "Cumulative cases", x = "Month", title = paste("R0 in India (according to the model) - ", sprintf(R0, fmt = '%.4f'))) +
+  scale_colour_manual(name = "", values = c(red = "red", black = "black", green = "green", blue = "blue"), 
+  labels = c("Susceptible", "Recovered", "Observed cases", "Infectious")
+  ) +
+  theme_minimal()
+
+```
+
+***
+
+Known as the **Basic Reproduction number**, **R0** (pronounced “R-naught”) is the rate at which a virus is transmitted. It indicates the **average number of people who will contract the virus from a person who has already been infected**, in a population that does not have immunity for the said disease. 
+
+**The higher the R0, the more contagious the infection.**
+
+**Please note that this is a worst case prediction and should be taken with a lot of caution. Not surprisingly, it can be wrong. On one hand, this is based on rather unrealistic assumptions (for example, no public health interventions, fixed Reproduction number, etc.). On the other hand, we still have to be careful and strictly follow public health interventions because previous pandemics such as H1N1 and Spanish flu have shown that incredibly high numbers are not impossible! **
+
+**Legend:**
+
+- Black - Susceptible
+
+- Blue - Observed cases
+
+- Red - Infectious
+
+- Green - Recovered
+
+**Note:**
+
+For the model, cases from 1st March 2020 are only taken. 
+
+No. of days taken for prediction - 150
+
+
+### COVID-19 Predicted cases, India (Log-linear plot)
+
+```{r}
+
+# Logarithm plot
+fitted_cumulative_incidence %>%
+  ggplot(aes(x = Date)) +
+  geom_line(aes(y = I, colour = "red")) +
+  geom_line(aes(y = S, colour = "black")) +
+  geom_line(aes(y = R, colour = "green")) +
+  geom_point(aes(y = cumulative_incident_cases, colour = "blue")) +
+  scale_y_log10(labels = scales::comma) +
+  labs(y = "Cumulative cases", x = "Month", title = paste("R0 in India (according to the model) - ", sprintf(R0, fmt = '%.4f'))) +
+  scale_colour_manual(name = "", values = c(red = "red", black = "black", green = "green", blue = "blue"),
+    labels = c("Susceptible", "Observed cases", "Recovered", "Infectious")
+  ) +
+  theme_minimal()
+
+```
+
+***
+
+**Please note that this is a worst case prediction and should be taken with a lot of caution. Not surprisingly, it can be wrong. On one hand, this is based on rather unrealistic assumptions (for example, no public health interventions, fixed Reproduction number, etc.). On the other hand, we still have to be careful and strictly follow public health interventions because previous pandemics such as H1N1 and Spanish flu have shown that incredibly high numbers are not impossible! **
+
+**Note:**
+
+For the model, cases from 1st March 2020 are only taken. 
+
+
+About {data-icon="fa-question-circle"}
+==========
+
+**COVID-19 in India**
+
+**COVID-19 in India : A Dashboard** gives an overview of the spread of the Novel Coronavirus (COVID-19) pandemic across India, state-wise along with **SIR (Susceptible - Infectious - Recovered) model** for a period of 150 days starting from March 1. 
+
+This dashboard has been made entirely using Rmarkdown framework.
+
+**Data: **
+
+[COVID-19 India API](https://api.covid19india.org/), a volunteer-driven API for COVID-19 stats & patient tracing in India.
+
+**R packages used: **
+
+* Dashboard - [flexdashboard](https://rmarkdown.rstudio.com/flexdashboard/) package.
+
+* Table - [DT](https://rstudio.github.io/DT/) and [dplyr](https://dplyr.tidyverse.org/) packages.
+
+* API Data - [rjson](https://www.rdocumentation.org/packages/rjson/versions/0.2.20) package.
+
+* Modeling - [deSolve](http://desolve.r-forge.r-project.org/) and [lubridate](https://lubridate.tidyverse.org/) packages. 
+
+* Visualizations - [plotly](https://plot.ly/r/), [ggplot2](https://ggplot2.tidyverse.org/), [geojsonio](https://ropensci.org/tutorials/geojsonio_tutorial/), [ggiraph](https://davidgohel.github.io/ggiraph/), [colormap](https://bhaskarvk.github.io/colormap/) and [hrbrthemes](https://hrbrmstr.github.io/hrbrthemes/) packages. 
+
+**Note: **
+
 For any other question or feedback, you can contact me on [LinkedIn](https://www.linkedin.com/in/srinath-kr-026147173/).
 
-**Acknowledgement:**
+**Acknowledgement: **
 
 Thanks for the API, [COVID-19 India API](https://api.covid19india.org/)! 
 
