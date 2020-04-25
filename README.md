@@ -111,3 +111,5 @@ For any other question or feedback, you can contact me on [LinkedIn](https://www
 **Acknowledgement:**
 
 Thanks for the API, [COVID-19 India API](https://api.covid19india.org/)!
+
+Thanks for the information about SIR model, [Wikipedia](https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology#The_SIR_model)!
