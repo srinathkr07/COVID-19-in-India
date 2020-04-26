@@ -6,23 +6,23 @@ Link for the dashboard: https://srinathkr.shinyapps.io/COVID19-India/
 
 (The site takes some time to load, so please bear with it!)
 
-## Summary (as of 25th April 2020, 6:30 pm)
+## Summary (as of 26th April 2020, 5 pm)
 
 ![Summary](/Screenshots/Summary.png)
 
-## Visualization (as of 25th April 2020, 6:30 pm)
+## Visualization (as of 26th April 2020, 5 pm)
 
 ![Visualization](/Screenshots/Visualization.png)
 
-## Cumulative Trends (as of 25th April 2020, 6:30 pm)
+## Cumulative Trends (as of 26th April 2020, 5 pm)
 
 ![Cumulative Trends](/Screenshots/CumulativeTrends.png)
 
-## Daily Trends (as of 25th April 2020, 6:30 pm)
+## Daily Trends (as of 26th April 2020, 5 pm)
 
 ![Daily Trends](/Screenshots/DailyTrends.png)
 
-## SIR Model (as of 25th April 2020, 6:30 pm)
+## SIR Model (as of 26th April 2020, 5 pm)
 
 ### Introduction
 
@@ -74,11 +74,11 @@ the so-called **Basic Reproduction number** (also called basic reproduction rati
 
 ### Prediction of infectious cases
 
-![Worst case prediction of infectious cases](/Screenshots/SIRModel3.png)
+![Prediction of infectious cases](/Screenshots/SIRModel3.png)
 
 ### Prediction of infectious cases (Log-linear)
 
-![Worst case prediction of infectious cases (Log-linear)](/Screenshots/SIRModel4.png)
+![Prediction of infectious cases (Log-linear)](/Screenshots/SIRModel4.png)
 
 ## Note
 
