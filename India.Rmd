@@ -71,8 +71,20 @@ final_plot = merged_shape[order(merged_shape$order), ]
 final_plot[is.na(final_plot)] = 0
 
 
-daily = data.frame(matrix(ncol = 7, nrow = 0))
-colnames(daily) = c("Date", "DailyConfirmed", "DailyRecovered", "DailyDeath", "TotalConfirmed", "TotalRecovered", "TotalDeath")
+# daily = data.frame(matrix(ncol = 7, nrow = 0))
+# colnames(daily) = c("Date", "DailyConfirmed", "DailyRecovered", "DailyDeath", "TotalConfirmed", "TotalRecovered", "TotalDeath")
+# 
+# for(i in 1:length(result$cases_time_series))
+#   daily[nrow(daily)+1, ] = list(format(as.Date(paste(trimws(result$cases_time_series[[i]]$date), "2020"), format = "%d %B %y"), "%d %b %Y"),
+#                                 as.numeric(result$cases_time_series[[i]]$dailyconfirmed),
+#                                 as.numeric(result$cases_time_series[[i]]$dailyrecovered),
+#                                 as.numeric(result$cases_time_series[[i]]$dailydeceased),
+#                                 as.numeric(result$cases_time_series[[i]]$totalconfirmed),
+#                                 as.numeric(result$cases_time_series[[i]]$totalrecovered),
+#                                 as.numeric(result$cases_time_series[[i]]$totaldeceased))
+
+daily = data.frame(matrix(ncol = 8, nrow = 0))
+colnames(daily) = c("Date", "DailyConfirmed", "DailyRecovered", "DailyDeath", "TotalConfirmed", "TotalActive", "TotalRecovered", "TotalDeath")
 
 for(i in 1:length(result$cases_time_series))
   daily[nrow(daily)+1, ] = list(format(as.Date(paste(trimws(result$cases_time_series[[i]]$date), "2020"), format = "%d %B %y"), "%d %b %Y"),
@@ -80,6 +92,7 @@ for(i in 1:length(result$cases_time_series))
                                 as.numeric(result$cases_time_series[[i]]$dailyrecovered),
                                 as.numeric(result$cases_time_series[[i]]$dailydeceased),
                                 as.numeric(result$cases_time_series[[i]]$totalconfirmed),
+                                as.numeric(result$cases_time_series[[i]]$totalconfirmed) - as.numeric(result$cases_time_series[[i]]$totalrecovered) - as.numeric(result$cases_time_series[[i]]$totaldeceased),
                                 as.numeric(result$cases_time_series[[i]]$totalrecovered),
                                 as.numeric(result$cases_time_series[[i]]$totaldeceased))
 
@@ -332,8 +345,8 @@ SIR Model {.storyboard data-orientation=rows data-icon="fa-area-chart"}
 
 ```{r}
 
-Infected = daily$TotalConfirmed
-Infected=Infected[c(32:length(Infected))] #From 1st March 2020 till previous day
+Infected = daily$TotalActive
+Infected=Infected[c(33:length(Infected))] # From 2nd March 2020 till previous day
 Day <- 1:(length(Infected))
 
 N = 1380004385 # Population of India
@@ -349,7 +362,7 @@ RSS <- function(parameters) {
 Opt <- optim(c(0.5, 0.5), RSS, method = "L-BFGS-B", lower = c(0, 0), upper = c(1, 1), control = list(parscale = c(10^-4,10^-4)))
 Opt_par <- setNames(Opt$par, c("beta", "gamma"))
 
-sir_start_date <- "2020-03-01"
+sir_start_date <- "2020-03-02"
 
 t <- 1:as.integer(ymd(Sys.Date()) - ymd(sir_start_date))
 
@@ -393,7 +406,7 @@ The basic idea behind the **SIR (Susceptible - Infectious - Recovered) model** o
 
 **Note:**
 
-For the model, cases from 1st March 2020 are only taken. 
+For the model, cases from 2nd March 2020 are only taken. 
 
 
 ### COVID-19 Predicted vs Observed cases, India (Log-linear plot)
@@ -420,19 +433,19 @@ fitted_cumulative_incidence %>%
 
 **Note:**
 
-For the model, cases from 1st March 2020 are only taken. 
+For the model, cases from 2nd March 2020 are only taken. 
 
 
 ### COVID-19 Predicted cases, India
 
 ```{r}
 
-#Basic Reproduction number
+# Basic Reproduction number
 R0 = as.numeric(Opt_par[1] / Opt_par[2])
 
-t <- 1:150
+t <- 1:150 # 150 days
 
-# get the fitted values from SIR model
+# Get the fitted values from SIR model
 fitted_cumulative_incidence <- data.frame(ode(
   y = init, times = t,
   func = SIR, parms = Opt_par
@@ -482,7 +495,7 @@ Known as the **Basic Reproduction number**, **R0** (pronounced “R-naught”) i
 
 **Note:**
 
-For the model, cases from 1st March 2020 are only taken. 
+For the model, cases from 2nd March 2020 are only taken. 
 
 No. of days taken for prediction - 150
 
@@ -513,7 +526,7 @@ fitted_cumulative_incidence %>%
 
 **Note:**
 
-For the model, cases from 1st March 2020 are only taken. 
+For the model, cases from 2nd March 2020 are only taken. 
 
 
 About {data-icon="fa-question-circle"}
