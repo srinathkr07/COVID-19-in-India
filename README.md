@@ -22,7 +22,7 @@ Link for the dashboard: https://srinathkr.shinyapps.io/COVID19-India/
 
 ![Daily Trends](/Screenshots/DailyTrends.png)
 
-## SIR Model (as of 26th April 2020, 5 pm)
+## SIR Model
 
 ### Introduction
 
@@ -36,11 +36,11 @@ The model consists of three compartments:
 
 This model is reasonably predictive for infectious diseases that are transmitted from human to human. 
 
-### Predicted vs Observed cases
+### Predicted vs Observed cases (as of 26th April 2020, 5 pm)
 
 ![Predicted vs Observed cases](/Screenshots/SIRModel1.png)
 
-### Predicted vs Observed cases (Log-linear)
+### Predicted vs Observed cases (Log-linear) (as of 26th April 2020, 5 pm)
 
 ![Predicted vs Observed cases (Log-linear)](/Screenshots/SIRModel2.png)
 
@@ -72,15 +72,15 @@ The dynamics of the infectious class depends on the following ratio:
 
 the so-called **Basic Reproduction number** (also called basic reproduction ratio). **R0** (pronounced “R-naught”) is the rate at which a virus is transmitted. It indicates the **average number of people who will contract the virus from a person who has already been infected**, in a population where all subjects are susceptible. 
 
-### Prediction of infectious cases
+### Prediction of infectious cases (as of 26th April 2020, 5 pm)
 
 ![Prediction of infectious cases](/Screenshots/SIRModel3.png)
 
-### Prediction of infectious cases (Log-linear)
+### Prediction of infectious cases (Log-linear) (as of 26th April 2020, 5 pm)
 
 ![Prediction of infectious cases (Log-linear)](/Screenshots/SIRModel4.png)
 
-## Note
+### Note
 
 This is a **worst case prediction** and should be taken with a lot of caution. Not surprisingly, it can be wrong. On one hand, this is based on rather unrealistic assumptions (for example, no public health interventions, fixed Reproduction number, etc.). On the other hand, we still have to be careful and strictly follow public health interventions because previous pandemics such as H1N1 and Spanish flu have shown that incredibly high numbers are not impossible! 
 
