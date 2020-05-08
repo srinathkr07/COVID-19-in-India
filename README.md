@@ -6,19 +6,19 @@ Link for the dashboard: https://srinathkr.shinyapps.io/COVID19-India/
 
 (The site takes some time to load, so please bear with it!)
 
-## Summary (as of 26th April 2020, 5 pm)
+## Summary (as of 8th May 2020, 5 pm)
 
 ![Summary](/Screenshots/Summary.png)
 
-## Visualization (as of 26th April 2020, 5 pm)
+## Visualization (as of 8th May 2020, 5 pm)
 
 ![Visualization](/Screenshots/Visualization.png)
 
-## Cumulative Trends (as of 26th April 2020, 5 pm)
+## Cumulative Trends (as of 8th May 2020, 5 pm)
 
 ![Cumulative Trends](/Screenshots/CumulativeTrends.png)
 
-## Daily Trends (as of 26th April 2020, 5 pm)
+## Daily Trends (as of 8th May 2020, 5 pm)
 
 ![Daily Trends](/Screenshots/DailyTrends.png)
 
@@ -36,11 +36,11 @@ The model consists of three compartments:
 
 This model is reasonably predictive for infectious diseases that are transmitted from human to human. 
 
-### Predicted vs Observed cases (as of 26th April 2020)
+### Predicted vs Observed cases (as of 8th May 2020)
 
 ![Predicted vs Observed cases](/Screenshots/SIRModel1.png)
 
-### Predicted vs Observed cases (Log-linear) (as of 26th April 2020)
+### Predicted vs Observed cases (Log-linear) (as of 8th May 2020)
 
 ![Predicted vs Observed cases (Log-linear)](/Screenshots/SIRModel2.png)
 
@@ -72,11 +72,11 @@ The dynamics of the infectious class depends on the following ratio:
 
 the so-called **Basic Reproduction number** (also called basic reproduction ratio). **R0** (pronounced “R-naught”) is the rate at which a virus is transmitted. It indicates the **average number of people who will contract the virus from a person who has already been infected**, in a population where all subjects are susceptible. 
 
-### Prediction of infectious cases (as of 26th April 2020)
+### Prediction of infectious cases (as of 8th May 2020)
 
 ![Prediction of infectious cases](/Screenshots/SIRModel3.png)
 
-### Prediction of infectious cases (Log-linear) (as of 26th April 2020)
+### Prediction of infectious cases (Log-linear) (as of 8th May 2020)
 
 ![Prediction of infectious cases (Log-linear)](/Screenshots/SIRModel4.png)
 
@@ -86,13 +86,11 @@ This is a **worst case prediction** and should be taken with a lot of caution. N
 
 ## About
 
-**COVID-19 in India : A Dashboard** gives an overview of the spread of the Novel Coronavirus (COVID-19) pandemic across India, state-wise along with **SIR (Susceptible - Infectious - Recovered) model** for a period of 150 days starting from March 2. 
+**COVID-19 in India** 
 
-This dashboard has been made entirely using Rmarkdown framework.
+This dashboard/tracker gives an overview of the spread of the Novel Coronavirus (COVID-19) pandemic across India, state-wise along with **SIR (Susceptible - Infectious - Recovered) model** for a period of 150 days starting from March 2. 
 
-**Data:**
-
-[COVID-19 India API](https://api.covid19india.org/), a volunteer-driven API for COVID-19 stats & patient tracing in India.
+This application has been made entirely using Rmarkdown framework.
 
 **R packages used:**
 
@@ -106,12 +104,24 @@ This dashboard has been made entirely using Rmarkdown framework.
 
 * Visualizations - [plotly](https://plot.ly/r/), [ggplot2](https://ggplot2.tidyverse.org/), [geojsonio](https://ropensci.org/tutorials/geojsonio_tutorial/), [ggiraph](https://davidgohel.github.io/ggiraph/), [colormap](https://bhaskarvk.github.io/colormap/) and [hrbrthemes](https://hrbrmstr.github.io/hrbrthemes/) packages. 
 
-**Note:**
+## FAQ
 
-For any other question or feedback, you can contact me on [LinkedIn](https://www.linkedin.com/in/srinath-kr-026147173/).
+**Are you official?**
 
-**Acknowledgement:**
+No.
 
-Thanks for the API, [COVID-19 India API](https://api.covid19india.org/)!
+**Who are you?**
 
-Thanks for the information about SIR model, [Wikipedia](https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology#The_SIR_model)!
+I am an enthusiastic developer and a data analyst who wanted to do contribute to the fight against COVID-19.
+
+**Is the project open sourced?**
+
+Yes! The project is completely open sourced. You can find the link to the GitHub repo [here](https://github.com/srinathkr07/COVID-19-in-India/).
+
+**From where do you get the data?**
+
+Data collected by a group of volunteers is validated and published into a Google sheet and an API. Thanks for the API, [COVID-19 India API](https://api.covid19india.org/)! 
+
+**Is the SIR model accurate?**
+
+I ain't a specialist in Epidemiology so there are bound to be differences between actual and predicted cases. These predictions are only meant to be taken as a worst case scenario and with a lot of caution. 
