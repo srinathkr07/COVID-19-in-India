@@ -46,9 +46,10 @@ totalConfirmed = as.numeric(result$statewise[[1]]$confirmed)
 totalActive = as.numeric(result$statewise[[1]]$active)
 totalRecovered = as.numeric(result$statewise[[1]]$recovered)
 totalDeath = as.numeric(result$statewise[[1]]$deaths)
+totalSamplesTested = as.numeric(result$tested[[length(result$tested)]]$totalsamplestested)
 
-india = data.frame(matrix(ncol = 5, nrow = 0))
-colnames(india) = c("State/UT", "Confirmed", "Active", "Recovered", "Death")
+india = data.frame(matrix(ncol = 7, nrow = 0))
+colnames(india) = c("State/UT", "Confirmed", "Active", "Recovered", "Death", "Recovery Rate", "Death Rate")
 
 for (i in 2:38)
   if(as.numeric(result$statewise[[i]]$confirmed)>0)
@@ -56,7 +57,9 @@ for (i in 2:38)
                                 as.numeric(result$statewise[[i]]$confirmed), 
                                 as.numeric(result$statewise[[i]]$active), 
                                 as.numeric(result$statewise[[i]]$recovered), 
-                                as.numeric(result$statewise[[i]]$deaths))
+                                as.numeric(result$statewise[[i]]$deaths),
+                                as.numeric(result$statewise[[i]]$recovered) / as.numeric(result$statewise[[i]]$confirmed),
+                                as.numeric(result$statewise[[i]]$deaths) / as.numeric(result$statewise[[i]]$confirmed))
 
 india = india[order(-india[, 2]), ]
 
@@ -83,12 +86,13 @@ final_plot[is.na(final_plot)] = 0
 #                                 as.numeric(result$cases_time_series[[i]]$totalrecovered),
 #                                 as.numeric(result$cases_time_series[[i]]$totaldeceased))
 
-daily = data.frame(matrix(ncol = 8, nrow = 0))
-colnames(daily) = c("Date", "DailyConfirmed", "DailyRecovered", "DailyDeath", "TotalConfirmed", "TotalActive", "TotalRecovered", "TotalDeath")
+daily = data.frame(matrix(ncol = 9, nrow = 0))
+colnames(daily) = c("Date", "DailyConfirmed", "DailyActive", "DailyRecovered", "DailyDeath", "TotalConfirmed", "TotalActive", "TotalRecovered", "TotalDeath")
 
 for(i in 1:length(result$cases_time_series))
   daily[nrow(daily)+1, ] = list(format(as.Date(paste(trimws(result$cases_time_series[[i]]$date), "2020"), format = "%d %B %y"), "%d %b %Y"),
                                 as.numeric(result$cases_time_series[[i]]$dailyconfirmed),
+                                as.numeric(result$cases_time_series[[i]]$dailyconfirmed) - as.numeric(result$cases_time_series[[i]]$dailyrecovered) - as.numeric(result$cases_time_series[[i]]$dailydeceased),
                                 as.numeric(result$cases_time_series[[i]]$dailyrecovered),
                                 as.numeric(result$cases_time_series[[i]]$dailydeceased),
                                 as.numeric(result$cases_time_series[[i]]$totalconfirmed),
@@ -104,14 +108,22 @@ Summary {data-orientation=rows data-icon="fa-list-alt"}
 Row{}
 ----------------------
 
+### Total Samples tested
+
+```{r}
+
+valueBox(value = paste(format(totalSamplesTested, big.mark = ","), "", sep = ""), icon = "fa-flask")
+
+```
+
 ### Total Confirmed cases
 
 ```{r}
 
 if(DeltaConfirmed>=0) {
-  valueBox(value = paste(format(totalConfirmed, big.mark = ","), " (", "\u25B2", DeltaConfirmed, ")", sep = " "), icon = "fa-check-circle")
+  valueBox(value = paste(format(totalConfirmed, big.mark = ","), " (", "\u25B2", DeltaConfirmed, ")", sep = ""), icon = "fa-check-circle")
 } else {
-  valueBox(value = paste(format(totalConfirmed, big.mark = ","), " (", "\u25BC", DeltaConfirmed, ")", sep = " "), icon = "fa-check-circle")
+  valueBox(value = paste(format(totalConfirmed, big.mark = ","), " (", "\u25BC", DeltaConfirmed, ")", sep = ""), icon = "fa-check-circle")
 }
 
 ```
@@ -120,7 +132,7 @@ if(DeltaConfirmed>=0) {
 
 ```{r}
 
-valueBox(value = paste(format(totalActive, big.mark = ","), "", sep = " "), icon = "fa-toggle-on")
+valueBox(value = paste(format(totalActive, big.mark = ","), "", sep = ""), icon = "fa-toggle-on")
 
 ```
 
@@ -129,9 +141,9 @@ valueBox(value = paste(format(totalActive, big.mark = ","), "", sep = " "), icon
 ```{r}
 
 if(DeltaRecovered>=0) {
-  valueBox(value = paste(format(totalRecovered, big.mark = ","), " (", "\u25B2", DeltaRecovered, ")", sep = " "), icon = "fa-heartbeat")
+  valueBox(value = paste(format(totalRecovered, big.mark = ","), " (", "\u25B2", DeltaRecovered, ")", sep = ""), icon = "fa-heartbeat")
 } else {
-  valueBox(value = paste(format(totalRecovered, big.mark = ","), " (", "\u25BC", DeltaRecovered, ")", sep = " "), icon = "fa-heartbeat")
+  valueBox(value = paste(format(totalRecovered, big.mark = ","), " (", "\u25BC", DeltaRecovered, ")", sep = ""), icon = "fa-heartbeat")
 }
   
 
@@ -142,13 +154,14 @@ if(DeltaRecovered>=0) {
 ```{r}
 
 if(DeltaDeaths>=0) {
-  valueBox(value = paste(format(totalDeath, big.mark = ","), " (", "\u25B2", DeltaDeaths, ")", sep = " "), icon = "fa-bed")
+  valueBox(value = paste(format(totalDeath, big.mark = ","), " (", "\u25B2", DeltaDeaths, ")", sep = ""), icon = "fa-bed")
 } else {
-  valueBox(value = paste(format(totalDeath, big.mark = ","), " (", "\u25BC", DeltaDeaths, ")", sep = " "), icon = "fa-bed")
+  valueBox(value = paste(format(totalDeath, big.mark = ","), " (", "\u25BC", DeltaDeaths, ")", sep = ""), icon = "fa-bed")
 }
   
 
 ```
+
 
 Row {}
 -----------------------------------------------------------------------
@@ -160,7 +173,9 @@ Row {}
 india %>%
   DT::datatable(rownames = FALSE,
                 colnames = colnames(india),
-                options = list(pageLength = nrow(india), dom = 'tip'))
+                options = list(pageLength = nrow(india), dom = 'tip')) %>%
+  DT::formatPercentage("Recovery Rate", 2) %>%
+  DT::formatPercentage("Death Rate", 2) 
 
 ```
 
@@ -171,7 +186,7 @@ Visualization {data-icon="fa-bar-chart"}
 Column
 ------------------------
 
-### State-wise distribution of cases
+### State wise distribution of cases
 
 ```{r}
 
@@ -275,8 +290,8 @@ daily$Date = dmy(daily$Date)
 
 plotly::plot_ly(data = daily,
                 x = daily$Date,
-                y = daily$TotalConfirmed, 
-                name = 'Confirmed', 
+                y = daily$TotalActive, 
+                name = 'Active', 
                 fillcolor = "#1f77b4",
                 type = 'scatter',
                 mode = 'none', 
@@ -307,10 +322,10 @@ plotly::plot_ly(data = daily,
 plotly::plot_ly(data = daily) %>%
   
   plotly::add_trace(x = daily$Date , 
-                    y = daily$DailyConfirmed,
+                    y = daily$DailyActive,
                     type = "scatter",
                     mode = "lines+markers",
-                    name = "Confirmed",
+                    name = "Active",
                     line = list(color = "#1f77b4"),
                     marker = list(color = "#1f77b4")) %>%
 
@@ -529,20 +544,18 @@ fitted_cumulative_incidence %>%
 For the model, cases from 2nd March 2020 are only taken. 
 
 
-About {data-icon="fa-question-circle"}
+About and FAQ {data-icon="fa-question-circle"}
 ==========
+
+### About
 
 **COVID-19 in India**
 
-**COVID-19 in India : A Dashboard** gives an overview of the spread of the Novel Coronavirus (COVID-19) pandemic across India, state-wise along with **SIR (Susceptible - Infectious - Recovered) model** for a period of 150 days starting from March 2. 
+This dashboard/tracker gives an overview of the spread of the Novel Coronavirus (COVID-19) pandemic across India, state-wise along with **SIR (Susceptible - Infectious - Recovered) model** for a period of 150 days starting from March 2. 
 
-This dashboard has been made entirely using Rmarkdown framework.
+This application has been made entirely using Rmarkdown framework.
 
-**Data:**
-
-[COVID-19 India API](https://api.covid19india.org/), a volunteer-driven API for COVID-19 stats & patient tracing in India.
-
-**R packages used:**
+**R packages used: **
 
 * Dashboard - [flexdashboard](https://rmarkdown.rstudio.com/flexdashboard/) package.
 
@@ -554,12 +567,26 @@ This dashboard has been made entirely using Rmarkdown framework.
 
 * Visualizations - [plotly](https://plot.ly/r/), [ggplot2](https://ggplot2.tidyverse.org/), [geojsonio](https://ropensci.org/tutorials/geojsonio_tutorial/), [ggiraph](https://davidgohel.github.io/ggiraph/), [colormap](https://bhaskarvk.github.io/colormap/) and [hrbrthemes](https://hrbrmstr.github.io/hrbrthemes/) packages. 
 
-**Note:**
+### FAQ
 
-For any other question or feedback, you can contact me on [LinkedIn](https://www.linkedin.com/in/srinath-kr-026147173/).
+**Are you official?**
 
-**Acknowledgement:**
+No.
 
-Thanks for the API, [COVID-19 India API](https://api.covid19india.org/)! 
+**Who are you?**
 
-**Created by [Srinath K R](https://github.com/srinathkr07).**  
+I am an enthusiastic developer and a data analyst who wanted to do contribute to the fight against COVID-19.
+
+**Is the project open sourced?**
+
+Yes! The project is completely open sourced. You can find the link to the GitHub repo [here](https://github.com/srinathkr07/COVID-19-in-India/).
+
+**From where do you get the data?**
+
+Data collected by a group of volunteers is validated and published into a Google sheet and an API. Thanks for the API, [COVID-19 India API](https://api.covid19india.org/)! 
+
+**Is the SIR model accurate?**
+
+I ain't a specialist in Epidemiology so there are bound to be differences between actual and predicted cases. These predictions are only meant to be taken as a worst case scenario and with a lot of caution. 
+
+**Created by [Srinath K R](https://www.linkedin.com/in/srinath-k-r-026147173/).**  
