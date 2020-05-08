@@ -555,7 +555,7 @@ This dashboard/tracker gives an overview of the spread of the Novel Coronavirus 
 
 This application has been made entirely using Rmarkdown framework.
 
-**R packages used: **
+**R packages used:**
 
 * Dashboard - [flexdashboard](https://rmarkdown.rstudio.com/flexdashboard/) package.
 
