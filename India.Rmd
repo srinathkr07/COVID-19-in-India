@@ -1,5 +1,5 @@
 ---
-title: "COVID-19 in India"
+title: "COVID-19 India Analysis"
 
 output: 
   flexdashboard::flex_dashboard:
@@ -47,6 +47,7 @@ totalActive = as.numeric(result$statewise[[1]]$active)
 totalRecovered = as.numeric(result$statewise[[1]]$recovered)
 totalDeath = as.numeric(result$statewise[[1]]$deaths)
 totalSamplesTested = as.numeric(result$tested[[length(result$tested)]]$totalsamplestested)
+SamplesUpdatedDate = result$tested[[length(result$tested)]]$updatetimestamp
 
 india = data.frame(matrix(ncol = 7, nrow = 0))
 colnames(india) = c("State/UT", "Confirmed", "Active", "Recovered", "Death", "Recovery Rate", "Death Rate")
@@ -108,11 +109,11 @@ Summary {data-orientation=rows data-icon="fa-list-alt"}
 Row{}
 ----------------------
 
-### Total Samples tested
+### Total Samples tested as on `r sprintf(SamplesUpdatedDate)`
 
 ```{r}
 
-valueBox(value = paste(format(totalSamplesTested, big.mark = ","), "", sep = ""), icon = "fa-flask")
+valueBox(value = paste(format(totalSamplesTested, big.mark = ","), "", sep = ""), icon = "fa-vial")
 
 ```
 
@@ -166,7 +167,7 @@ if(DeltaDeaths>=0) {
 Row {}
 -----------------------------------------------------------------------
 
-### State wise details
+### State wise details {.no-title}
 
 ```{r}
 
@@ -186,7 +187,7 @@ Visualization {data-icon="fa-bar-chart"}
 Column
 ------------------------
 
-### State wise distribution of cases
+### State wise distribution of cases {.no-title}
 
 ```{r}
 
@@ -222,7 +223,7 @@ plotly::plot_ly(data = india,
 Column {}
 -----------------------------------------------------------------------
 
-### India map
+### India map {.no-title}
 
 ```{r}
 
@@ -306,7 +307,7 @@ plotly::plot_ly(data = daily,
                     fillcolor = "red") %>%
   
   plotly::layout(title = "",
-                 yaxis = list(title = "Cumulative Number of Cases"),
+                 yaxis = list(title = "Cumulative cases"),
                  xaxis = list(title = "Date"),
                  legend = list(x = 0.1, y = 0.9),
                  hovermode = "compare")
@@ -547,9 +548,9 @@ For the model, cases from 2nd March 2020 are only taken.
 About and FAQ {data-icon="fa-question-circle"}
 ==========
 
-### About
+### About {data-height=330}
 
-**COVID-19 in India**
+**COVID-19 in India : An Analysis**
 
 This dashboard/tracker gives an overview of the spread of the Novel Coronavirus (COVID-19) pandemic across India, state-wise along with **SIR (Susceptible - Infectious - Recovered) model** for a period of 150 days starting from March 2. 
 
@@ -575,11 +576,11 @@ No.
 
 **Who are you?**
 
-I am an enthusiastic developer and a data analyst who wanted to do contribute to the fight against COVID-19.
+I am an enthusiastic developer and a data analyst who wanted to do contribute to India's fight against COVID-19.
 
 **Is the project open sourced?**
 
-Yes! The project is completely open sourced. You can find the link to the GitHub repo [here](https://github.com/srinathkr07/COVID-19-in-India/).
+Yes! The project is completely open sourced. You can find the link to the GitHub repository below. 
 
 **From where do you get the data?**
 
@@ -587,6 +588,12 @@ Data collected by a group of volunteers is validated and published into a Google
 
 **Is the SIR model accurate?**
 
-I ain't a specialist in Epidemiology so there are bound to be differences between actual and predicted cases. These predictions are only meant to be taken as a worst case scenario and with a lot of caution. 
+I am not a specialist in Epidemiology, so there are bound to be differences between the actual and predicted cases. These predictions are only meant to be taken as a worst case scenario and with a lot of caution. 
 
 **Created by [Srinath K R](https://www.linkedin.com/in/srinath-k-r-026147173/).**  
+
+```{r}
+
+div(actionButton(inputId = "GitHubRepo", icon = icon("github"), label = "Open Sourced on GitHub", onclick  = "window.open('https://github.com/srinathkr07/COVID-19-in-India/', '_blank')"), align = "center")
+
+```
