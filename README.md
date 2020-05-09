@@ -32,7 +32,7 @@ The model consists of three compartments:
 
 - **S** for the number of **susceptible**, 
 - **I** for the number of **infectious**, and 
-- **R** for the number of **recovered** or deceased (or immune) individuals. 
+- **R** for the number of **recovered** or deceased individuals. 
 
 This model is reasonably predictive for infectious diseases that are transmitted from human to human. 
 
@@ -85,8 +85,6 @@ the so-called **Basic Reproduction number** (also called basic reproduction rati
 This is a **worst case prediction** and should be taken with a lot of caution. Not surprisingly, it can be wrong. On one hand, this is based on rather unrealistic assumptions (for example, no public health interventions, fixed Reproduction number, etc.). On the other hand, we still have to be careful and strictly follow public health interventions because previous pandemics such as H1N1 and Spanish flu have shown that incredibly high numbers are not impossible! 
 
 ## About
-
-**COVID-19 in India : An Analysis** 
 
 This dashboard/tracker gives an overview of the spread of the Novel Coronavirus (COVID-19) pandemic across India, state-wise along with **SIR (Susceptible - Infectious - Recovered) model** for a period of 150 days starting from March 2. 
 
