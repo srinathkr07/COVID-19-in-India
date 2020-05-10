@@ -1,6 +1,6 @@
 # COVID-19 in India : An Analysis
 
-A shiny R dashboard to give an overview of the spread of the Novel Coronavirus COVID-19 pandemic across India, state-wise along with **SIR (Susceptible - Infectious - Recovered) model** for a period of 150 days starting from March 2. 
+A shiny R dashboard to give an overview of the spread of the Novel Coronavirus COVID-19 pandemic across India, state-wise along with **SIR (Susceptible - Infectious - Recovered) model** for a period of 150 days starting from March 1. 
 
 Link for the dashboard: https://srinathkr.shinyapps.io/COVID19-India/
 
@@ -36,11 +36,11 @@ The model consists of three compartments:
 
 This model is reasonably predictive for infectious diseases that are transmitted from human to human. 
 
-### Predicted vs Observed cases (as of 9th May 2020)
+### Predicted vs Observed cases (as of 10th May 2020)
 
 ![Predicted vs Observed cases](/Screenshots/SIRModel1.png)
 
-### Predicted vs Observed cases (Log-linear) (as of 9th May 2020)
+### Predicted vs Observed cases (Log-linear) (as of 10th May 2020)
 
 ![Predicted vs Observed cases (Log-linear)](/Screenshots/SIRModel2.png)
 
@@ -72,11 +72,11 @@ The dynamics of the infectious class depends on the following ratio:
 
 the so-called **Basic Reproduction number** (also called basic reproduction ratio). **R0** (pronounced “R-naught”) is the rate at which a virus is transmitted. It indicates the **average number of people who will contract the virus from a person who has already been infected**, in a population where all subjects are susceptible. 
 
-### Prediction of infectious cases (as of 9th May 2020)
+### Prediction of infectious cases (as of 10th May 2020)
 
 ![Prediction of infectious cases](/Screenshots/SIRModel3.png)
 
-### Prediction of infectious cases (Log-linear) (as of 9th May 2020)
+### Prediction of infectious cases (Log-linear) (as of 10th May 2020)
 
 ![Prediction of infectious cases (Log-linear)](/Screenshots/SIRModel4.png)
 
@@ -86,7 +86,7 @@ This is a **worst case prediction** and should be taken with a lot of caution. N
 
 ## About
 
-This dashboard/tracker gives an overview of the spread of the Novel Coronavirus (COVID-19) pandemic across India, state-wise along with **SIR (Susceptible - Infectious - Recovered) model** for a period of 150 days starting from March 2. 
+This dashboard/tracker gives an overview of the spread of the Novel Coronavirus (COVID-19) pandemic across India, state-wise along with **SIR (Susceptible - Infectious - Recovered) model** for a period of 150 days starting from March 1. 
 
 This application has been made entirely using Rmarkdown framework.
 
