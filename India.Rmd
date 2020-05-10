@@ -361,8 +361,8 @@ SIR Model {.storyboard data-orientation=rows data-icon="fa-area-chart"}
 
 ```{r}
 
-Infected = daily$TotalActive
-Infected=Infected[c(33:length(Infected))] # From 2nd March 2020 till previous day
+Infected = daily$TotalConfirmed
+Infected = Infected[c(32 : length(Infected))] # From 1st March 2020 till previous day
 Day <- 1:(length(Infected))
 
 N = 1380004385 # Population of India
@@ -378,7 +378,7 @@ RSS <- function(parameters) {
 Opt <- optim(c(0.5, 0.5), RSS, method = "L-BFGS-B", lower = c(0, 0), upper = c(1, 1), control = list(parscale = c(10^-4,10^-4)))
 Opt_par <- setNames(Opt$par, c("beta", "gamma"))
 
-sir_start_date <- "2020-03-02"
+sir_start_date <- "2020-03-01"
 
 t <- 1:as.integer(ymd(Sys.Date()) - ymd(sir_start_date))
 
@@ -386,7 +386,7 @@ fitted_cumulative_incidence <- data.frame(ode(y = init, times = t, func = SIR, p
 
 fitted_cumulative_incidence <- fitted_cumulative_incidence %>%
   mutate(
-    Date = ymd(sir_start_date) + days(t - 1),
+    Date = ymd(sir_start_date) + days(t),
     Country = "India",
     cumulative_incident_cases = Infected
   )
@@ -422,7 +422,7 @@ The basic idea behind the **SIR (Susceptible - Infectious - Recovered) model** o
 
 **Note:**
 
-For the model, cases from 2nd March 2020 are only taken. 
+For the model, cases from 1st March 2020 are only taken. 
 
 
 ### COVID-19 Predicted vs Observed cases, India (Log-linear plot)
@@ -449,7 +449,7 @@ fitted_cumulative_incidence %>%
 
 **Note:**
 
-For the model, cases from 2nd March 2020 are only taken. 
+For the model, cases from 1st March 2020 are only taken. 
 
 
 ### COVID-19 Predicted cases, India
@@ -470,7 +470,7 @@ fitted_cumulative_incidence <- data.frame(ode(
 # With date
 fitted_cumulative_incidence <- fitted_cumulative_incidence %>%
   mutate(
-    Date = ymd(sir_start_date) + days(t - 1),
+    Date = ymd(sir_start_date) + days(t),
     Country = "India",
     cumulative_incident_cases = c(Infected, rep(NA, length(t) - length(Infected)))
   )
@@ -483,7 +483,7 @@ fitted_cumulative_incidence %>%
   geom_line(aes(y = R), colour = "green") +
   geom_point(aes(y = cumulative_incident_cases), colour = "blue") +
   scale_y_continuous(labels = scales::comma) +
-  labs(y = "Cumulative cases", x = "Month", title = paste("R0 in India (according to the model) - ", sprintf(R0, fmt = '%.4f'))) +
+  labs(y = "Cumulative cases", x = "Month", title = paste("R0 in India (acc. to the model) - ", sprintf(R0, fmt = '%.4f'))) +
   scale_colour_manual(name = "", values = c(red = "red", black = "black", green = "green", blue = "blue"), 
   labels = c("Susceptible", "Recovered", "Observed cases", "Infectious")
   ) +
@@ -511,7 +511,7 @@ Known as the **Basic Reproduction number**, **R0** (pronounced “R-naught”) i
 
 **Note:**
 
-For the model, cases from 2nd March 2020 are only taken. 
+For the model, cases from 1st March 2020 are only taken. 
 
 No. of days taken for prediction - 150
 
@@ -528,7 +528,7 @@ fitted_cumulative_incidence %>%
   geom_line(aes(y = R, colour = "green")) +
   geom_point(aes(y = cumulative_incident_cases, colour = "blue")) +
   scale_y_log10(labels = scales::comma) +
-  labs(y = "Cumulative cases", x = "Month", title = paste("R0 in India (according to the model) - ", sprintf(R0, fmt = '%.4f'))) +
+  labs(y = "Cumulative cases", x = "Month", title = paste("R0 in India (acc. to the model) - ", sprintf(R0, fmt = '%.4f'))) +
   scale_colour_manual(name = "", values = c(red = "red", black = "black", green = "green", blue = "blue"),
     labels = c("Susceptible", "Observed cases", "Recovered", "Infectious")
   ) +
@@ -542,7 +542,7 @@ fitted_cumulative_incidence %>%
 
 **Note:**
 
-For the model, cases from 2nd March 2020 are only taken. 
+For the model, cases from 1st March 2020 are only taken. 
 
 
 About and FAQ {data-icon="fa-question-circle"}
@@ -552,7 +552,7 @@ About and FAQ {data-icon="fa-question-circle"}
 
 **COVID-19 in India : An Analysis**
 
-This dashboard/tracker gives an overview of the spread of the Novel Coronavirus (COVID-19) pandemic across India, state-wise along with **SIR (Susceptible - Infectious - Recovered) model** for a period of 150 days starting from March 2. 
+This dashboard/tracker gives an overview of the spread of the Novel Coronavirus (COVID-19) pandemic across India, state-wise along with **SIR (Susceptible - Infectious - Recovered) model** for a period of 150 days starting from March 1. 
 
 This application has been made entirely using Rmarkdown framework.
 
