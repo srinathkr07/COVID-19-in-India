@@ -4,7 +4,7 @@ title: "COVID-19 India Analysis"
 output: 
   flexdashboard::flex_dashboard:
     vertical_layout:  fill
-    social: ["twitter", "facebook", "linkedin"]
+    social: menu
     theme: readable
     
 runtime: shiny
@@ -38,14 +38,17 @@ SIR <- function(time, state, parameters) {
 
 result = fromJSON(file = "https://api.covid19india.org/data.json")
 
-DeltaConfirmed = result$statewise[[1]]$deltaconfirmed
-DeltaDeaths = result$statewise[[1]]$deltadeaths
-DeltaRecovered = result$statewise[[1]]$deltarecovered
+lastUpdatedTime = result$statewise[[1]]$lastupdatedtime
+
+DeltaConfirmed = as.numeric(result$statewise[[1]]$deltaconfirmed)
+DeltaDeaths = as.numeric(result$statewise[[1]]$deltadeaths)
+DeltaRecovered = as.numeric(result$statewise[[1]]$deltarecovered)
 
 totalConfirmed = as.numeric(result$statewise[[1]]$confirmed)
 totalActive = as.numeric(result$statewise[[1]]$active)
 totalRecovered = as.numeric(result$statewise[[1]]$recovered)
 totalDeath = as.numeric(result$statewise[[1]]$deaths)
+
 totalSamplesTested = as.numeric(result$tested[[length(result$tested)]]$totalsamplestested)
 SamplesUpdatedDate = result$tested[[length(result$tested)]]$updatetimestamp
 
@@ -73,19 +76,6 @@ states <- fortify(shape, region = "ST_NM")
 merged_shape = merge(states, copy, by = "id", all.x = TRUE)
 final_plot = merged_shape[order(merged_shape$order), ]
 final_plot[is.na(final_plot)] = 0
-
-
-# daily = data.frame(matrix(ncol = 7, nrow = 0))
-# colnames(daily) = c("Date", "DailyConfirmed", "DailyRecovered", "DailyDeath", "TotalConfirmed", "TotalRecovered", "TotalDeath")
-# 
-# for(i in 1:length(result$cases_time_series))
-#   daily[nrow(daily)+1, ] = list(format(as.Date(paste(trimws(result$cases_time_series[[i]]$date), "2020"), format = "%d %B %y"), "%d %b %Y"),
-#                                 as.numeric(result$cases_time_series[[i]]$dailyconfirmed),
-#                                 as.numeric(result$cases_time_series[[i]]$dailyrecovered),
-#                                 as.numeric(result$cases_time_series[[i]]$dailydeceased),
-#                                 as.numeric(result$cases_time_series[[i]]$totalconfirmed),
-#                                 as.numeric(result$cases_time_series[[i]]$totalrecovered),
-#                                 as.numeric(result$cases_time_series[[i]]$totaldeceased))
 
 daily = data.frame(matrix(ncol = 9, nrow = 0))
 colnames(daily) = c("Date", "DailyConfirmed", "DailyActive", "DailyRecovered", "DailyDeath", "TotalConfirmed", "TotalActive", "TotalRecovered", "TotalDeath")
@@ -117,7 +107,7 @@ valueBox(value = paste(format(totalSamplesTested, big.mark = ","), "", sep = "")
 
 ```
 
-### Total Confirmed cases
+### Total Confirmed cases as on `r sprintf(lastUpdatedTime)`
 
 ```{r}
 
@@ -129,7 +119,7 @@ if(DeltaConfirmed>=0) {
 
 ```
 
-### Total Active cases
+### Total Active cases as on `r sprintf(lastUpdatedTime)`
 
 ```{r}
 
@@ -137,7 +127,7 @@ valueBox(value = paste(format(totalActive, big.mark = ","), "", sep = ""), icon 
 
 ```
 
-### Total Recovered
+### Total Recovered as on `r sprintf(lastUpdatedTime)`
 
 ```{r}
 
@@ -150,7 +140,7 @@ if(DeltaRecovered>=0) {
 
 ```
 
-### Total Deaths
+### Total Deaths as on `r sprintf(lastUpdatedTime)`
 
 ```{r}
 
@@ -395,9 +385,7 @@ fitted_cumulative_incidence %>%
   ggplot(aes(x = Date)) +
   geom_line(aes(y = I), colour = "red") +
   geom_point(aes(y = cumulative_incident_cases), colour = "blue") +
-  labs(
-    y = "Cumulative cases"
-  ) +
+  labs(y = "Cumulative cases", x = "Month") +
   theme_minimal()
 
 ```
@@ -433,7 +421,7 @@ fitted_cumulative_incidence %>%
   ggplot(aes(x = Date)) +
   geom_line(aes(y = I), colour = "red") +
   geom_point(aes(y = cumulative_incident_cases), colour = "blue") +
-  labs(y = "Cumulative cases") +
+  labs(y = "Cumulative cases", x = "Month") +
   theme_minimal() +
   scale_y_log10(labels = scales::comma)
 
@@ -483,10 +471,9 @@ fitted_cumulative_incidence %>%
   geom_line(aes(y = R), colour = "green") +
   geom_point(aes(y = cumulative_incident_cases), colour = "blue") +
   scale_y_continuous(labels = scales::comma) +
-  labs(y = "Cumulative cases", x = "Month", title = paste("R0 in India (acc. to the model) - ", sprintf(R0, fmt = '%.4f'))) +
+  labs(y = "Cumulative cases", x = "Month", title = paste("R0 in India - ", sprintf(R0, fmt = '%.4f'))) + 
   scale_colour_manual(name = "", values = c(red = "red", black = "black", green = "green", blue = "blue"), 
-  labels = c("Susceptible", "Recovered", "Observed cases", "Infectious")
-  ) +
+  labels = c("Susceptible", "Observed cases", "Recovered", "Infectious")) +
   theme_minimal()
 
 ```
@@ -528,10 +515,9 @@ fitted_cumulative_incidence %>%
   geom_line(aes(y = R, colour = "green")) +
   geom_point(aes(y = cumulative_incident_cases, colour = "blue")) +
   scale_y_log10(labels = scales::comma) +
-  labs(y = "Cumulative cases", x = "Month", title = paste("R0 in India (acc. to the model) - ", sprintf(R0, fmt = '%.4f'))) +
+  labs(y = "Cumulative cases", x = "Month", title = paste("R0 in India  - ", sprintf(R0, fmt = '%.4f'))) +
   scale_colour_manual(name = "", values = c(red = "red", black = "black", green = "green", blue = "blue"),
-    labels = c("Susceptible", "Observed cases", "Recovered", "Infectious")
-  ) +
+  labels = c("Susceptible", "Observed cases", "Recovered", "Infectious")) +
   theme_minimal()
 
 ```
@@ -594,6 +580,6 @@ I am not a specialist in Epidemiology, so there are bound to be differences betw
 
 ```{r}
 
-div(actionButton(inputId = "GitHubRepo", icon = icon("github"), label = "Open Sourced on GitHub", onclick  = "window.open('https://github.com/srinathkr07/COVID-19-in-India/', '_blank')"), align = "center")
+div(actionButton(inputId = "GitHubRepo", icon = icon("github"), label = "Open Sourced on GitHub", onclick  = "window.open('https://github.com/srinathkr07/COVID-19-in-India/', '_blank')", style = "color: white; background-color: black"), align = "center")
 
 ```
