@@ -6,6 +6,10 @@ Link for the dashboard: https://srinathkr.shinyapps.io/COVID19-India/
 
 (The site takes some time to load, so please bear with it!)
 
+## Contributor
+
+[Srinath K R](https://github.com/srinathkr07)
+
 ## Summary (as of 9th May 2020, 12:30 pm)
 
 ![Summary](/Screenshots/Summary.png)
