@@ -55,7 +55,7 @@ SamplesUpdatedDate = result$tested[[length(result$tested)]]$updatetimestamp
 india = data.frame(matrix(ncol = 7, nrow = 0))
 colnames(india) = c("State/UT", "Confirmed", "Active", "Recovered", "Death", "Recovery Rate", "Death Rate")
 
-for (i in 2:38)
+for (i in 2:length(result$statewise))
   if(as.numeric(result$statewise[[i]]$confirmed)>0)
     india[nrow(india)+1, ] = list(result$statewise[[i]]$state, 
                                 as.numeric(result$statewise[[i]]$confirmed), 
@@ -246,38 +246,6 @@ Row {.tabset}
 ```{r}
 
 daily$Date = dmy(daily$Date)
-
-# plotly::plot_ly(data = daily) %>%
-#   
-#   plotly::add_trace(x = daily$Date , 
-#                     y = daily$TotalConfirmed,
-#                     type = "scatter",
-#                     mode = "lines+markers",
-#                     name = "Confirmed",
-#                     line = list(color = "#1f77b4"),
-#                     marker = list(color = "#1f77b4")) %>%
-# 
-#   plotly::add_trace(x = daily$Date , 
-#                     y = daily$TotalRecovered,
-#                     type = "scatter",
-#                     mode = "lines+markers",
-#                     name = "Recovered",
-#                     line = list(color = "forestgreen"),
-#                     marker = list(color = "forestgreen")) %>%
-#   
-#   plotly::add_trace(x = daily$Date , 
-#                     y = daily$TotalDeath,
-#                     type = "scatter",
-#                     mode = "lines+markers",
-#                     name = "Death",
-#                     line = list(color = "red"),
-#                     marker = list(color = "red")) %>%
-#   
-#   plotly::layout(title = "",
-#                  yaxis = list(title = "Cumulative cases"),
-#                  xaxis = list(title = "Date"),
-#                  legend = list(x = 0.1, y = 0.9),
-#                  hovermode = "compare")
 
 plotly::plot_ly(data = daily,
                 x = daily$Date,
