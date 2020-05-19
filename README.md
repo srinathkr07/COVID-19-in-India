@@ -1,5 +1,7 @@
 # COVID-19 in India : An Analysis
 
+[![eRum2020::CovidR](https://badgen.net/https/runkit.io/erum2020-covidr/badge/branches/master/srinathkr-covid19-in-india?cache=300)](https://milano-r.github.io/erum2020-covidr-contest/srinathkr-covid19-in-india.html)
+
 A shiny R dashboard to give an overview of the spread of the Novel Coronavirus COVID-19 pandemic across India, state-wise along with **SIR (Susceptible - Infectious - Recovered) model** for a period of 150 days starting from March 1. 
 
 Link for the dashboard: https://srinathkr.shinyapps.io/COVID19-India/
