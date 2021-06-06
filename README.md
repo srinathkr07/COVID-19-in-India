@@ -4,10 +4,6 @@
 
 A shiny R dashboard to give an overview of the spread of the Novel Coronavirus COVID-19 pandemic across India, state-wise along with **SIR (Susceptible - Infectious - Recovered) model** for a period of 150 days starting from March 1. 
 
-Link for the dashboard: https://srinathkr.shinyapps.io/COVID19-India/
-
-(The site takes some time to load, so please bear with it!)
-
 ## Contributor
 
 [Srinath K R](https://github.com/srinathkr07)
